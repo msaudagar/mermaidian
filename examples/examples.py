@@ -73,11 +73,11 @@ mmp.show_image_pyplot(jpeg2)
 
 diagram3_text = '''
 flowchart LR
-    subgraph Azure
+    subgraph AWS
         s[Server]
         db[(Database)]
     end
-    subgraph Netlify
+    subgraph Vercel
         c[Client]
     end
 
@@ -86,7 +86,7 @@ flowchart LR
     db -. Result Set .-> s
     s -- SQL Query --> db
 '''    
-jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Netlify, Server & Database on Azure', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
+jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Vercel, Server & Database on AWS', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
 mmp.save_diagram_as_image('output/jpeg3.jpeg', jpeg3)
 mmp.show_image_pyplot(jpeg3)
 

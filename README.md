@@ -41,7 +41,7 @@ The following functions are meant to be used from the calling program (other fun
 
 The mermaidpy functions allow you to specify various options as key-value pairs. For the details of available mermaid.ink options, see https://mermaid.ink/ and for mermaid configuration options, see https://mermaid.js.org/config/schema-docs/config.html
 
-For a detailed help description on mermaidpy, execute `help(mm)` after importing it as pmm
+For a detailed help description on mermaidpy, execute `help(mmp)` after importing it as mmp
 
 
 ## Technologies-Used
@@ -164,7 +164,7 @@ The following examples demonstrate the use of mermaidpy functions for requesting
 ### Example 1 : A Simple Flowchart
 
 ```python
-import mermaidpy as pmm
+import mermaidpy as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -212,9 +212,9 @@ diagram1_text_plus_styles = diagram1_text + styles
 # Note that only following three function calls from mermaidpy to get, save and display the diagram.
 # The names of the functions clearly describe their functionalities.
 
-jpeg1 = pmm.get_mermaid_diagram('jpeg','Organization Structure', diagram1_text_plus_styles)
-pmm.save_diagram_as_image('jpeg1.jpeg', jpeg1)
-pmm.show_image_pyplot(jpeg1)
+jpeg1 = mmp.get_mermaid_diagram('jpeg','Organization Structure', diagram1_text_plus_styles)
+mmp.save_diagram_as_image('jpeg1.jpeg', jpeg1)
+mmp.show_image_pyplot(jpeg1)
 ```
 
 The result of the above code is given below:
@@ -226,7 +226,7 @@ The result of the above code is given below:
 ### Example 2 : Git Commits Diagram
 
 ```python
-import mermaidpy as pmm
+import mermaidpy as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -246,9 +246,9 @@ diagram2_text = '''
        commit
 '''
 
-jpeg2 = pmm.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, 'default',{'bgColor': 'dbeafe','width':'600px','height':'300'})
-pmm.save_diagram_as_image('jpeg2.jpeg', jpeg2)
-pmm.show_image_pyplot(jpeg2)
+jpeg2 = mmp.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, 'default',{'bgColor': 'dbeafe','width':'600px','height':'300'})
+mmp.save_diagram_as_image('jpeg2.jpeg', jpeg2)
+mmp.show_image_pyplot(jpeg2)
 ```
 
 The result of the above code is given below:
@@ -260,7 +260,7 @@ The result of the above code is given below:
 ### Example 3 : Client-Server Interaction
 
 ```python
-import mermaidpy as pmm
+import mermaidpy as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -279,9 +279,9 @@ flowchart LR
     db -. Result Set .-> s
     s -- SQL Query --> db
 '''    
-jpeg3 = pmm.get_mermaid_diagram('jpeg','Client on Netlify, Server & Database on Azure', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
-pmm.save_diagram_as_image('jpeg3.jpeg', jpeg3)
-pmm.show_image_pyplot(jpeg3)
+jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Netlify, Server & Database on Azure', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
+mmp.save_diagram_as_image('jpeg3.jpeg', jpeg3)
+mmp.show_image_pyplot(jpeg3)
 ```
 
 The result of the above code is given below:
@@ -293,7 +293,7 @@ The result of the above code is given below:
 ### Example 4 : A Customer-Cashier Interaction Sequence Diagram
 
 ```python
-import mermaidpy as pmm
+import mermaidpy as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -316,9 +316,9 @@ sequenceDiagram
   end
 '''
 
-jpeg4 = pmm.get_mermaid_diagram('jpeg','Customer-Cashier Interaction', diagram4_text, {'primaryColor':'#fcd34d'},{'bgColor':'fef3c7', 'height':'500'})
-pmm.save_diagram_as_image('jpeg4.jpeg', jpeg4)
-pmm.show_image_pyplot(jpeg4)
+jpeg4 = mmp.get_mermaid_diagram('jpeg','Customer-Cashier Interaction', diagram4_text, {'primaryColor':'#fcd34d'},{'bgColor':'fef3c7', 'height':'500'})
+mmp.save_diagram_as_image('jpeg4.jpeg', jpeg4)
+mmp.show_image_pyplot(jpeg4)
 ```
 
 
@@ -331,7 +331,7 @@ The result of the above code is given below:
 ### Example 5 : A Simple Entity Relationship Diagram (ERD)
 
 ```python
-import mermaidpy as pmm
+import mermaidpy as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -364,9 +364,9 @@ diagram5_text = '''
     }  
 '''   
 
-jpeg5 = pmm.get_mermaid_diagram('jpeg', 'Entity Relationship Diagram', diagram5_text,'forest', {'bgColor': 'e5e7eb', 'width': '400'})
-pmm.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
-pmm.show_image_pyplot(jpeg5)
+jpeg5 = mmp.get_mermaid_diagram('jpeg', 'Entity Relationship Diagram', diagram5_text,'forest', {'bgColor': 'e5e7eb', 'width': '400'})
+mmp.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
+mmp.show_image_pyplot(jpeg5)
 ```
 
 The result of the above code is given below:
