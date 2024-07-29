@@ -1,9 +1,9 @@
-# un-comment following for running mermaidpy from project directory without installing mermaidpy from PyPI
+# un-comment following for running mermaidian from project directory without installing mermaidian from PyPI
 # import sys
 # import os
-# sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mermaidpy'))) 
+# sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mermaidian'))) 
 
-import mermaidpy as mmp
+import mermaidian as mmp
 
 # help(mm)
 

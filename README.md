@@ -1,17 +1,17 @@
-# mermaidpy 
+# mermaidian 
 
-![Last commit](https://img.shields.io/github/last-commit/msaudagar/mermaidpy?color=green&label=Last%20commit)
-![Repo size](https://img.shields.io/github/repo-size/msaudagar/mermaidpy?color=orange&label=Repo%20size)
-[![Stars](https://img.shields.io/github/stars/msaudagar/mermaidpy?color=yellow&label=Stars)](https://github.com/msaudagar/Expense-Tracker-Chatbot/stargazers)
-[![Forks](https://img.shields.io/github/forks/msaudagar/mermaidpy?color=orange&label=Forks)](https://github.com/msaudagar/mermaidpy/forks)
+![Last commit](https://img.shields.io/github/last-commit/msaudagar/mermaidian?color=green&label=Last%20commit)
+![Repo size](https://img.shields.io/github/repo-size/msaudagar/mermaidian?color=orange&label=Repo%20size)
+[![Stars](https://img.shields.io/github/stars/msaudagar/mermaidian?color=yellow&label=Stars)](https://github.com/msaudagar/Expense-Tracker-Chatbot/stargazers)
+[![Forks](https://img.shields.io/github/forks/msaudagar/mermaidian?color=orange&label=Forks)](https://github.com/msaudagar/mermaidian/forks)
 
 
-mermaidpy is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
+mermaidian is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
 
-A sample Mermaid.js diagram generated using mermaidpy is given below: 
+A sample Mermaid.js diagram generated using mermaidian is given below: 
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/ml-bg-black2.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/ml-bg-black2.jpeg">
 </p>
 
 ## Table of Contents 📋
@@ -28,7 +28,7 @@ A sample Mermaid.js diagram generated using mermaidpy is given below:
 
 Mermaid.js is a Javascript based package for creating many types of diagrams and charts from declative text-lines.
 
-The **mermaidpy** package enables you to use Mermaid.js from Python. It utilizes the mermaid.ink service for getting diagrams in response to http requests in a prescribed format. mermaidpy provides a set of Python functions for sending requests with diagram data to mermaid.ink and for getting, showing and saving the returned diagrams.
+The **mermaidian** package enables you to use Mermaid.js from Python. It utilizes the mermaid.ink service for getting diagrams in response to http requests in a prescribed format. mermaidian provides a set of Python functions for sending requests with diagram data to mermaid.ink and for getting, showing and saving the returned diagrams.
 
 The following functions are meant to be used from the calling program (other functions are internal):
 - get_mermaid_diagram(): The main function to get the desired diagram either as image binary (bytes) or SVG text
@@ -38,9 +38,9 @@ The following functions are meant to be used from the calling program (other fun
 - save_diagram_as_image(): For saving the diagram as an image (png, jpeg etc.)
 - save_diagram_as_svg(): For saving the diagram as a SVG file 
 
-The mermaidpy functions allow you to specify various options as key-value pairs. For the details of available mermaid.ink options, see https://mermaid.ink/ and for mermaid configuration options, see https://mermaid.js.org/config/schema-docs/config.html
+The mermaidian functions allow you to specify various options as key-value pairs. For the details of available mermaid.ink options, see https://mermaid.ink/ and for mermaid configuration options, see https://mermaid.js.org/config/schema-docs/config.html
 
-For a detailed help description on mermaidpy, execute `help(mmp)` after importing it as mmp
+For a detailed help description on mermaidian, execute `help(mmp)` after importing it as mmp
 
 
 ## Technologies-Used
@@ -55,12 +55,12 @@ For a detailed help description on mermaidpy, execute `help(mmp)` after importin
 
 ## Getting-Started
 
-- Install mermaidpy using `pip install mermaidpy`
-- Read the "mermaidpy Functions" section for knowing purpose and syntax of callable functions
-- See the [examples](#examples) to understand how mermaidpy works.
+- Install mermaidian using `pip install mermaidian`
+- Read the "mermaidian Functions" section for knowing purpose and syntax of callable functions
+- See the [examples](#examples) to understand how mermaidian works.
 
 
-## mermaidpy Functions
+## mermaidian Functions
 
 #### `get_mermaid_diagram(format, title, diagram_text, theme, options)`
 ```python
@@ -157,12 +157,12 @@ For a detailed help description on mermaidpy, execute `help(mmp)` after importin
 
 ## Examples
 
-The following examples demonstrate the use of "mermaidpy" functions for requesting, saving and displaying Mermaid.js diagrams. 
+The following examples demonstrate the use of "mermaidian" functions for requesting, saving and displaying Mermaid.js diagrams. 
 
 ### Example 1 : A Simple Flowchart
 
 ```python
-import mermaidpy as mmp
+import mermaidian as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -207,7 +207,7 @@ styles = """
 # concatenate styles with the diagram1_text  
 diagram1_text_plus_styles = diagram1_text + styles
 
-# Note that only following three function calls from mermaidpy to get, save and display the diagram.
+# Note that only following three function calls from mermaidian to get, save and display the diagram.
 # The names of the functions clearly describe their functionalities.
 
 jpeg1 = mmp.get_mermaid_diagram('jpeg','Organization Structure', diagram1_text_plus_styles)
@@ -218,13 +218,13 @@ mmp.show_image_pyplot(jpeg1)
 The result of the above code is given below:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
 </p>
 
 ### Example 2 : Git Commits Diagram
 
 ```python
-import mermaidpy as mmp
+import mermaidian as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -252,13 +252,13 @@ mmp.show_image_pyplot(jpeg2)
 The result of the above code is given below:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg2.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg2.jpeg">
 </p>
 
 ### Example 3 : Client-Server Interaction
 
 ```python
-import mermaidpy as mmp
+import mermaidian as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -285,13 +285,13 @@ mmp.show_image_pyplot(jpeg3)
 The result of the above code is given below:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg3.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg3.jpeg">
 </p>
 
 ### Example 4 : A Customer-Cashier Interaction Sequence Diagram
 
 ```python
-import mermaidpy as mmp
+import mermaidian as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -323,13 +323,13 @@ mmp.show_image_pyplot(jpeg4)
 The result of the above code is given below:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg4.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg4.jpeg">
 </p>
 
 ### Example 5 : A Simple Entity Relationship Diagram (ERD)
 
 ```python
-import mermaidpy as mmp
+import mermaidian as mmp
 
 # define the diagram code/text as per Mermaid.js docs.
 
@@ -370,12 +370,12 @@ mmp.show_image_pyplot(jpeg5)
 The result of the above code is given below:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg5.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg5.jpeg">
 </p>
 
 ## Conclusions
 
-- mermaidpy is a set of Python functions that enable users to easily use Mermaid.js diagramming capabilities from Python. It provides a simple way to include custom theme variables in a dict form. Other image options can also be specified as key-value pairs in a dict.
+- mermaidian is a set of Python functions that enable users to easily use Mermaid.js diagramming capabilities from Python. It provides a simple way to include custom theme variables in a dict form. Other image options can also be specified as key-value pairs in a dict.
 
 - The core Mermaid.js syntax is preserved, therefore most of the Mermaid.js documentation can be referred for syntax and configuration details. 
 
