@@ -1,7 +1,8 @@
-# import pymermaid as mm
-import sys
-import os
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mermaidpy'))) 
+# un-comment following for running mermaidpy from project directory without installing mermaidpy from PyPI
+# import sys
+# import os
+# sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mermaidpy'))) 
+
 import mermaidpy as mmp
 
 # help(mm)

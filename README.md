@@ -10,7 +10,9 @@ mermaidpy is a simple Python interface for using Mermaid.js diagramming capabili
 
 A sample Mermaid.js diagram generated using mermaidpy is given below: 
 
-![Machine Learning Types](https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/ml-bg-black2.jpeg)
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/ml-bg-black2.jpeg">
+</p>
 
 ## Table of Contents 📋
 
