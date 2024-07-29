@@ -219,17 +219,11 @@ pmm.show_image_pyplot(jpeg1)
 
 The result of the above code is given below:
 
-
 <p align="center" width="100%">
     <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg">
 </p>
 
-
-![Organization Structure jpeg](https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg)
-
-
 ### Example 2 : Git Commits Diagram
-
 
 ```python
 import mermaidpy as pmm
@@ -255,11 +249,15 @@ diagram2_text = '''
 jpeg2 = pmm.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, 'default',{'bgColor': 'dbeafe','width':'600px','height':'300'})
 pmm.save_diagram_as_image('jpeg2.jpeg', jpeg2)
 pmm.show_image_pyplot(jpeg2)
-
 ```
 
-### Example 3 : Client-Server Interaction
+The result of the above code is given below:
 
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg2.jpeg">
+</p>
+
+### Example 3 : Client-Server Interaction
 
 ```python
 import mermaidpy as pmm
@@ -286,8 +284,13 @@ pmm.save_diagram_as_image('jpeg3.jpeg', jpeg3)
 pmm.show_image_pyplot(jpeg3)
 ```
 
-### Example 4 : A Customer-Cashier Interaction Sequence Diagram
+The result of the above code is given below:
 
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg3.jpeg">
+</p>
+
+### Example 4 : A Customer-Cashier Interaction Sequence Diagram
 
 ```python
 import mermaidpy as pmm
@@ -318,10 +321,14 @@ pmm.save_diagram_as_image('jpeg4.jpeg', jpeg4)
 pmm.show_image_pyplot(jpeg4)
 ```
 
-The resulting sequence diagram is given below:
+
+The result of the above code is given below:
+
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg4.jpeg">
+</p>
 
 ### Example 5 : A Simple Entity Relationship Diagram (ERD)
-
 
 ```python
 import mermaidpy as pmm
@@ -362,7 +369,12 @@ pmm.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
 pmm.show_image_pyplot(jpeg5)
 ```
 
-The resulting sequence diagram is given below:
+The result of the above code is given below:
+
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg5.jpeg">
+</p>
+
 
 
 ## Conclusions
