@@ -219,6 +219,12 @@ pmm.show_image_pyplot(jpeg1)
 
 The result of the above code is given below:
 
+
+<p align="center" width="100%">
+    <img width="50%" src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg">
+</p>
+
+
 ![Organization Structure jpeg](https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg)
 
 
