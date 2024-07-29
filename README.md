@@ -6,7 +6,7 @@
 [![Forks](https://img.shields.io/github/forks/msaudagar/mermaidpy?color=orange&label=Forks)](https://github.com/msaudagar/mermaidpy/forks)
 
 
-mermaidpy is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python settings and also from IPython based notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
+mermaidpy is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
 
 A sample Mermaid.js diagram generated using mermaidpy is given below: 
 
@@ -20,10 +20,7 @@ A sample Mermaid.js diagram generated using mermaidpy is given below:
 - [Technologies Used](#Technologies-Used)
 - [Getting Started](#Getting-Started)
 - [Examples](#Examples)
-- [Contributing](#Contributing)
-- [Feedback](#Feedback)
 - [Conclusion](#Conclusion)
-- [Contact](#Contact)
 - [License](#License)
 - [References](#References)
 
@@ -158,10 +155,9 @@ For a detailed help description on mermaidpy, execute `help(mmp)` after importin
     '''   
 ```
 
-
 ## Examples
 
-The following examples demonstrate the use of mermaidpy functions for requesting, saving and displaying Mermaid.js diagrams from Python. 
+The following examples demonstrate the use of "mermaidpy" functions for requesting, saving and displaying Mermaid.js diagrams. 
 
 ### Example 1 : A Simple Flowchart
 
@@ -268,11 +264,11 @@ import mermaidpy as mmp
 
 diagram3_text = '''
 flowchart LR
-    subgraph Azure
+    subgraph AWS
         s[Server]
         db[(Database)]
     end
-    subgraph Netlify
+    subgraph Vercel
         c[Client]
     end
 
@@ -281,7 +277,7 @@ flowchart LR
     db -. Result Set .-> s
     s -- SQL Query --> db
 '''    
-jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Netlify, Server & Database on Azure', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
+jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Vercel, Server & Database on AWS', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
 mmp.save_diagram_as_image('jpeg3.jpeg', jpeg3)
 mmp.show_image_pyplot(jpeg3)
 ```
@@ -376,8 +372,6 @@ The result of the above code is given below:
 <p align="center" width="100%">
     <img src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg5.jpeg">
 </p>
-
-
 
 ## Conclusions
 
