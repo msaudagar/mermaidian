@@ -221,7 +221,7 @@ The result of the above code is given below:
 
 
 <p align="center" width="100%">
-    <img width="50%" src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg">
+    <img width="35%" src="https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/jpeg1.jpeg">
 </p>
 
 
