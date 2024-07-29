@@ -5,10 +5,12 @@
 [![Stars](https://img.shields.io/github/stars/msaudagar/mermaidpy?color=yellow&label=Stars)](https://github.com/msaudagar/Expense-Tracker-Chatbot/stargazers)
 [![Forks](https://img.shields.io/github/forks/msaudagar/mermaidpy?color=orange&label=Forks)](https://github.com/msaudagar/mermaidpy/forks)
 
-![Machine Learning Types](https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/ml-bg-black.jpeg)
-
 
 mermaidpy is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python settings and also from IPython based notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
+
+A sample Mermaid.js diagram generated using mermaidpy is given below: 
+
+![Machine Learning Types](https://raw.githubusercontent.com/msaudagar/mermaidpy/main/assets/ml-bg-black2.jpeg)
 
 ## Table of Contents 📋
 
