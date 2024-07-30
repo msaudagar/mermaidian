@@ -1,4 +1,4 @@
-# mermaidian 
+# Mermaidian 
 
 ![Last commit](https://img.shields.io/github/last-commit/msaudagar/mermaidian?color=green&label=Last%20commit)
 ![Repo size](https://img.shields.io/github/repo-size/msaudagar/mermaidian?color=orange&label=Repo%20size)
@@ -6,7 +6,7 @@
 [![Forks](https://img.shields.io/github/forks/msaudagar/mermaidian?color=orange&label=Forks)](https://github.com/msaudagar/mermaidian/forks)
 
 
-mermaidian is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
+Mermaidian is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
 
 A sample Mermaid.js diagram generated using mermaidian is given below: 
 
