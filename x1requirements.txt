@@ -1,6 +1,0 @@
-ipython
-matplotlib
-numpy
-opencv-python
-PyYAML
-requests
