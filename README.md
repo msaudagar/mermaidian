@@ -60,7 +60,7 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 - See the [examples](#examples) to understand how mermaidian works.
 
 
-## mermaidian Functions
+## Mermaidian Functions
 
 #### `get_mermaid_diagram(format, title, diagram_text, theme, options)`
 ```python
