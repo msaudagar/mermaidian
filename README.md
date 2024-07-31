@@ -45,7 +45,7 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 
 ## Technologies-Used
 
-- [![Python](https://img.shields.io/badge/Python-3.12-blue)](https://www.python.org/)
+- [![Python](https://img.shields.io/badge/Python-3.9-blue)](https://www.python.org/)
 - [![Numpy](https://img.shields.io/badge/numpy-2.0.1-yellow)](https://pypi.org/project/numpy/)
 - [![Matplotlib](https://img.shields.io/badge/matplotlib-3.9.1-red)](https://pypi.org/project/matplotlib/)
 - [![IPython](https://img.shields.io/badge/ipython-8.26.0-green)](https://pypi.org/project/ipython/)
