@@ -22,5 +22,5 @@ setup(
     install_requires=required,
     license="MIT",
     url="https://github.com/msaudagar/mermaidian",
-    python_requires=">=3.12",
+    python_requires=">=3.9",
 )
