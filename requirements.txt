@@ -2,6 +2,5 @@ ipython==8.18.1
 matplotlib==3.9.1
 numpy==2.0.1
 opencv-python==4.10.0.84
-packaging==24.1
 PyYAML==6.0.1
 requests==2.32.3
