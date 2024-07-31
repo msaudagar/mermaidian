@@ -62,98 +62,56 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 
 ## Mermaidian Main Functions
 
-#### `get_mermaid_diagram(format, title, diagram_text, theme, options)`
-```python
-    '''
-    Sends a 'get' request to "https://mermaid.ink/" to get a diagram.
-    The request includes a string of frontmatter, diagram-string, and options 
+The Mermaidian package has following six functions for getting, showing and saving Mermaid.js diagrams. 
+
+### `get_mermaid_diagram(format, title, diagram_text, theme, options)`
+
+Sends a 'get' request to "https://mermaid.ink/" to get a diagram. The request includes a string of frontmatter, diagram-string, and options.
     
-            Parameters:
-                    format (str): The format of the requested diagram e.g. 'pdf', 'png','jpeg' or 'svg' etc.
-                    title (str): Title of the diagram
-                    diagram_text: The actual Mermaid code for the diagram as per Mermaid.js documentation
-                    theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict
-                           If string, then it can take one of 'forest', 'dark', 'neutral' and 'base' values.
-                           If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
-                    options (dict): a dict of option-value pairs. Some valid options include "bgColor", "width", "scale" etc.
+Parameters:  
+- format (str): The format of the requested diagram. One of 'svg', 'pdf', 'png','jpeg' or 'webp'.
+- title (str): Title of the diagram. Empty string for no title.
+- diagram_text: The actual Mermaid code for the diagram as per Mermaid.js documentation
+- theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict. If string, then it can take one of 'forest', 'dark', 'neutral', 'default' or 'base' values. If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
+- options (dict): a dict of option-value pairs. Some valid options include "bgColor", "width", "scale" etc.
 
-            Returns:
-                    diagram_content: The diagram content in the requested form 
-    '''   
-```
-#### `show_image_pyplot(image)`
-```python
-    '''
-    Displays the image-content as an image using matplotlib's pyplot
-    Works across both IPython and non-IPython 
-    uses numpy 'frombuffer' and cv2 'imdecode' and 'cvtColor' methods
-    uses 'imshow', 'axis' and 'show' methods of matplotlib.pyplot (plt)  
+Returns: The diagram content in the requested form 
 
+### `show_image_pyplot(image)`
 
-            Parameters:
-                    image (bytes): The diagram image to be displayed
+Displays the image-content as an image using matplotlib's pyplot. Works across both IPython and non-IPython.   
+Parameter: image (bytes): The diagram image to be displayed    
+Returns: None
 
-            Returns:
-                    None
-    '''
-```
-#### `show_image_ipython(image)`
-```python
-    '''
-    Displays the image-content as an image in IPython systems (e.g. Jupyter notebooks) 
-    uses IPython's 'Image' and 'display' functions
-    Does not work in non-IPython cases
-    For non-IPython cases use the show_image_pyplot() function  
+### `show_image_ipython(image)`
 
-            Parameters:
-                    image (bytes): The diagram image to be displayed
+Displays the image-content as an image in IPython systems (e.g. Jupyter notebooks). Does not work in non-IPython cases. For non-IPython cases use the show_image_pyplot() function
+Parameter: image (bytes): The diagram image to be displayed    
+Returns: None
 
-            Returns:
-                    None
-    '''
-```
-#### `show_svg_ipython(svg)`
-```python
-    '''
-    Displays the SVG-text as an SVG in IPython systems (e.g. Jupyter notebooks) 
-    uses IPython's 'SVG' and 'display' functions
-    Does not work in non-IPython cases
+### `show_svg_ipython(svg)`
 
-            Parameters:
-                    svg (text): The svg text to be displayed
+Displays the SVG-text as an SVG in IPython systems (e.g. Jupyter notebooks). Does not work in non-IPython cases.
+Parameter: image (text): The svg text to be displayed  
+Returns: None
 
-            Returns:
-                    None
-    '''
-```
-#### `save_diagram_as_image(path, diagram)`
-```python
-    '''
-    Saves the passed diagram content as an image file (png, jpeg, pdf etc.)
-    Works across both IPython and non-IPython  
+### `save_diagram_as_image(path, diagram)`
 
-            Parameters:
-                    path (str): Path of the output file. 
-                    diagram (bytes): The diagram to be saved
+Saves the passed diagram content as an image file (png, jpeg, pdf etc.). Works across both IPython and non-IPython.
+Parameters:
+- path (str): Path of the output file. 
+- diagram (bytes): The diagram to be saved
 
-            Returns:
-                    None
-    '''
-```
-#### `save_diagram_as_svg(path, diagram)`
-```python
-    '''
-    Saves the passed diagram content as an SVG file
-    Works across both IPython and non-IPython  
+Returns: None
 
-            Parameters:
-                    path (str): Path of the output file. 
-                    diagram (SVG text): The SVG of the diagram to be saved
+### `save_diagram_as_svg(path, diagram)`
 
-            Returns:
-                    None
-    '''   
-```
+Saves the passed diagram content as an SVG file. Works across both IPython and non-IPython.
+Parameters:
+- path (str): Path of the output file. 
+- diagram (SVG text): The SVG of the diagram to be saved  
+
+Returns: None
 
 ## Examples
 
