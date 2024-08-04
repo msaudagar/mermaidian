@@ -26,7 +26,7 @@ A sample Mermaid.js diagram generated using mermaidian is given below:
 
 ## Introduction
 
-Mermaid.js is a Javascript based package for creating many types of diagrams and charts from declative text-lines.
+Mermaid.js is a Javascript based package for creating many types of diagrams and charts from a set of declarative text-lines.
 
 The **Mermaidian** package enables you to use Mermaid.js from Python. It utilizes the mermaid.ink service for getting diagrams in response to http requests in a prescribed format. mermaidian provides a set of Python functions for sending requests with diagram data to mermaid.ink and for getting, showing and saving the returned diagrams.
 
