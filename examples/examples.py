@@ -3,13 +3,29 @@ import sys
 import os
 sys.path.append(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mermaidian'))) 
 
-import mermaidian as mmp
+import mermaidian as mm
+
+out_path = 'output'
+
+def get_and_show_diagram(format, title, diagram_text, theme='default', config={}, options={}):
+  diagram = mm.get_mermaid_diagram(format, title, diagram_text, theme, config, options)
+  mm.show_image_pyplot(diagram)
+  return diagram
+
+def get_show_and_save_diagram(name, format, title, diagram_text, theme='default', config={}, options={}):
+  diagram = mm.get_mermaid_diagram(format, title, diagram_text, theme, config, options)
+  mm.show_image_pyplot(diagram)
+  mm.save_diagram_as_image(f'{out_path}/{name}.{format}', diagram)
+  return diagram
 
 # help(mm)
 
-diagram1_text = """
-flowchart TD
-%% Nodes
+# A simple organization chart
+
+# Define the diagram in Mermaid syntax.
+org_chart_text = """
+flowchart TB
+%% Define nodes
     c[Company XYZ]
     d1[Department-1]
     d2[Department-2]
@@ -19,7 +35,7 @@ flowchart TD
     d2s1t1[Team-1]
     d2s1t2[Team-2]
 
-%% Links
+%% Define links
     c --- d1
     c --- d2
     c --- d3
@@ -29,9 +45,19 @@ flowchart TD
     d2s1 --- d2s1t2    
 """
 
+# Get, show and save the 'org_chart' as .jpeg with default theme, config and options
+get_show_and_save_diagram('org-chart_default_theme', 'jpeg', 'Organization Structure', org_chart_text)
+
+# Change the theme to 'forest'
+get_show_and_save_diagram('org-chart_forest_theme', 'jpeg', 'Organization Structure', org_chart_text, 'forest')
+
+# Change the theme to 'dark' 
+get_show_and_save_diagram('org-chart_dark_theme', 'jpeg', 'Organization Structure', org_chart_text, 'dark')
+
+# Define styles: linkStyle and classes, and assign classes to org_chart's nodes as 'styles' string
 styles = """    
 %% Define links style (default means apply to all links) 
-    linkStyle default stroke:#aaaaaa,stroke-width:2px,color:red;
+    linkStyle default stroke:#aaaaaa,stroke-width:2px;
     
 %% define classes
     classDef comp fill:#93c5fd;
@@ -45,12 +71,16 @@ styles = """
     class d2s1,d2s2 sec;
     class d2s1t1,d2s1t2 team;  
 """
+# Concatenate org_chart_text and styles strings
+org_chart_text_plus_styles = org_chart_text + styles
 
-diagram1_text_plus_styles = diagram1_text + styles
+# Get, display and save the styled org_chart
+get_show_and_save_diagram('org-chart-styled', 'jpeg', 'Organization Structure', org_chart_text_plus_styles)
 
-jpeg1 = mmp.get_mermaid_diagram('jpeg','Organization Structure', diagram1_text_plus_styles)
-mmp.save_diagram_as_image('output/jpeg1.jpeg', jpeg1)
-mmp.show_image_pyplot(jpeg1)
+# Change org_chart direction by replacing 'TB' in org_chart_text_plus_styles to 'LR'
+org_chart_text_plus_styles_LR = org_chart_text_plus_styles.replace('flowchart TB', 'flowchart LR', 1)
+get_show_and_save_diagram('org-chart-styled-LR', 'jpeg', 'Organization Structure', org_chart_text_plus_styles_LR)
+
 
 diagram2_text = '''
     gitGraph LR:
@@ -67,10 +97,12 @@ diagram2_text = '''
        commit
        commit
 '''
-
-jpeg2 = mmp.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, 'default',{'bgColor': 'dbeafe','width':'600px','height':'300'})
-mmp.save_diagram_as_image('output/jpeg2.jpeg', jpeg2)
-mmp.show_image_pyplot(jpeg2)
+theme = 'default'
+config = {}
+options = {'bgColor': 'dbeafe','width':'600px','height':'300'}
+jpeg2 = mm.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, theme, config ,options)
+mm.save_diagram_as_image('output/jpeg2.jpeg', jpeg2)
+mm.show_image_pyplot(jpeg2)
 
 diagram3_text = '''
 flowchart LR
@@ -87,9 +119,13 @@ flowchart LR
     db -. Result Set .-> s
     s -- SQL Query --> db
 '''    
-jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Vercel, Server & Database on AWS', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
-mmp.save_diagram_as_image('output/jpeg3.jpeg', jpeg3)
-mmp.show_image_pyplot(jpeg3)
+
+theme = 'default'
+config = {}
+options = {'bgColor': 'cccccc','width':'600px','height':'300'}
+jpeg3 = mm.get_mermaid_diagram('jpeg','Client on Vercel, Server & Database on AWS', diagram3_text, theme, config ,options)
+mm.save_diagram_as_image('output/jpeg3.jpeg', jpeg3)
+mm.show_image_pyplot(jpeg3)
 
 
 diagram4_text = '''
@@ -110,10 +146,12 @@ sequenceDiagram
   CH->>C: Gives 10% off coupon
   end
 '''
-
-jpeg4 = mmp.get_mermaid_diagram('jpeg','Customer-Cashier Interaction', diagram4_text, {'primaryColor':'#fcd34d'},{'bgColor':'fef3c7', 'height':'500'})
-mmp.save_diagram_as_image('output/jpeg4.jpeg', jpeg4)
-mmp.show_image_pyplot(jpeg4)
+theme = {'primaryColor':'#fcd34d'}
+config = {}
+options = {'bgColor':'fef3c7', 'height':'500'}
+jpeg4 = mm.get_mermaid_diagram('jpeg','Customer-Cashier Interaction', diagram4_text, theme, config, options)
+mm.save_diagram_as_image('output/jpeg4.jpeg', jpeg4)
+mm.show_image_pyplot(jpeg4)
 
 diagram5_text = '''
     erDiagram
@@ -143,10 +181,12 @@ diagram5_text = '''
         string(99) manufacturerAddress
     }  
 '''   
-
-jpeg5 = mmp.get_mermaid_diagram('jpeg', 'Entity Relationship Diagram', diagram5_text,'forest', {'bgColor': 'e5e7eb', 'width': '400'})
-mmp.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
-mmp.show_image_pyplot(jpeg5)
+theme = 'forest'
+config = {}
+options = {'bgColor': 'e5e7eb', 'width': '400'}
+jpeg5 = mm.get_mermaid_diagram('jpeg', 'Entity Relationship Diagram', diagram5_text, theme, config, options)
+mm.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
+mm.show_image_pyplot(jpeg5)
 
 diagram6_text = '''
 %%{
@@ -167,8 +207,12 @@ gantt
     section Task 2
         Write code for the GUI :task2, 02, 60d
     section Task 3
-        Test the GUI :task3, 05, 30d'''   
+        Test the GUI :task3, 05, 30d
+'''   
 
-jpeg6 = mmp.get_mermaid_diagram('jpeg', ' ', diagram6_text,'forest', {'bgColor':'e0f2fe', 'height':'300'})
-mmp.save_diagram_as_image('output/jpeg6.jpeg', jpeg6)
-mmp.show_image_pyplot(jpeg6)
+theme = 'forest'
+config = {}
+options = {'bgColor':'e0f2fe', 'height':'300'}
+jpeg6 = mm.get_mermaid_diagram('jpeg', ' ', diagram6_text, theme, config, options)
+mm.save_diagram_as_image('output/jpeg6.jpeg', jpeg6)
+mm.show_image_pyplot(jpeg6)

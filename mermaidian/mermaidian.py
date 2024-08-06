@@ -24,7 +24,7 @@ Functions:
     _dict_to_yaml(dict) -> YAML
     _make_frontmatter_dict(title, theme) -> dict
     _make_image_options_string(options) -> dict
-    get_mermaid_diagram(format, title, diagram_text,theme,options) -> bytes
+    get_mermaid_diagram(format, title, diagram_text, theme, config, options) -> bytes
     save_diagram_as_image(path, diagram) -> None
     save_diagram_as_svg(path, diagram) -> None
     show_image_ipython(image) -> None
@@ -35,8 +35,9 @@ Main variables:
 
     title (string): Title of the diagram.
     diagram_text (string): Text-lines between triple quotes for the diagram as per Mermaid.js docs.
-    theme (string|dict): If string, it can take any of '','forest','neutral', 'dark' or 'base' values.
+    theme (string|dict): If string, it can take any of '', 'default', 'forest', 'neutral', 'dark' or 'base' values.
                          If a dict, it represents theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
+    config (dict): a dictionary for all Mermaid.js configuration options except 'theme' and 'theme_variables'. See https://mermaid.js.org/config/schema-docs/config.html
     options (dict): Options that are applied to the requested image (see https://mermaid.ink/ ).
     format (string): format of the requested image e.g. "svg", "img", "png" etc.
 '''
@@ -169,9 +170,10 @@ def _make_image_options_string(options):
         image_options_string += "&" + key.strip() + "=" + options[key].strip()
     query_string = "?" + image_options_string[1:]
     return query_string
-    
 
-def _make_frontmatter_dict(title, theme):
+
+
+def _make_frontmatter_dict(title, theme, configin):
     '''
     Creates a dictionary for frontmatter of the code for a Mermaid diagram.
     In Mermaid.js the frontmatter is a YAML for specifying title, theme and other configurations
@@ -181,7 +183,85 @@ def _make_frontmatter_dict(title, theme):
             Parameters:
                     title (str): Title of the diagram
                     theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict
-                           If string, then it can take one of 'forest', 'dark', 'neutral' and 'base' values.
+                           If string, then it can take one of '', 'default', 'forest', 'dark', 'neutral' and 'base' values.
+                           If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
+                    configin (dict): a dictionary for all Mermaid.js configuration options except 'theme' and 'theme_variables'.
+                            (See https://mermaid.js.org/config/schema-docs/config.html for details)
+            Returns:
+                    The frontmatter dictionary contains  key-value pairs for various theme options  
+    ''' 
+    frontmatter = {'title': title, 'config':{}}
+    
+    if type(theme) is str:
+        frontmatter['config']['theme'] = theme       
+    else:
+        frontmatter['config']['theme'] = 'base'
+        frontmatter['config']['themeVariables'] = theme
+    
+    if isinstance(configin, dict) and configin!={}:
+        keys = configin.keys()    
+        for key in keys:
+            frontmatter['config'][key] = configin[key]       
+    return frontmatter
+
+
+def get_mermaid_diagram(format0, title, diagram_text, theme="default",config={},options={}):
+    '''
+    Sends a 'get' request to "https://mermaid.ink/" to get a diagram.
+    The request includes a string of frontmatter, diagram-string, and options 
+    
+            Parameters:
+                    format0 (str): The format of the requested diagram e.g. 'pdf', 'png','jpeg' or 'svg' etc.
+                    title (str): Title of the diagram
+                    diagram_text: The actual Mermaid code for the diagram as per Mermaid.js documentation 
+                    theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict
+                           If string, then it can take one of '', 'default', 'forest', 'dark', 'neutral' and 'base' values.
+                           If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
+                    config (dict): a dictionary for all Mermaid.js configuration options except 'theme' and 'theme_variables'.
+                           (See https://mermaid.js.org/config/schema-docs/config.html)
+   
+                    options (dict): a dict of option-value pairs. Some valid options include "bgColor", "width", "scale" etc. (see https://mermaid.ink)
+
+            Returns:
+                    diagram_content: The diagram content in the requested form 
+    '''   
+    if format0 == 'svg':
+        format = 'svg'
+    elif format0 == 'pdf':
+        format = 'pdf'             
+    else:
+        format = 'img'
+        if format0 == 'jpeg' or format0 == 'png' or format0 == 'webp' :
+            options['type']  = format0                    
+    image_options_string = _make_image_options_string(options)
+    frontmatter_dict = _make_frontmatter_dict(title, theme, config)
+#     frontmatter_dict = _make_frontmatter_dict(title, theme)
+    frontmatter_yaml = _dict_to_yaml(frontmatter_dict)
+    graph_string = frontmatter_yaml + diagram_text
+    graphbytes = graph_string.encode("utf8")
+    base64_bytes = base64.b64encode(graphbytes)
+    base64_string = base64_bytes.decode("ascii")
+    url_string = f"https://mermaid.ink/{format}/{base64_string}{image_options_string.strip()}"
+    diagram = requests.get(url_string)
+
+    #  diagram.text returns a string object, it is used for text files, such as SVG (.svg), HTML (.html) file, etc.
+    #  diagram.content returns a bytes object, it is used for binary files, such as PDF (.pdf), audio file, image (.png, .jpeg etc.), etc.
+    diagram_content = diagram.text if format == "svg" else diagram.content
+    return diagram_content
+
+    
+
+def _xmake_frontmatter_dict(title, theme):
+    '''
+    Creates a dictionary for frontmatter of the code for a Mermaid diagram.
+    In Mermaid.js the frontmatter is a YAML for specifying title, theme and other configurations
+    The frontmatter dictionary contains key-value pairs.
+    The keys may include 'title' and other theme_variables (see Mermaid.js docs)
+
+            Parameters:
+                    title (str): Title of the diagram
+                    theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict
+                           If string, then it can take one of '', 'default', 'forest', 'dark', 'neutral' and 'base' values.
                            If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
 
             Returns:
@@ -197,7 +277,7 @@ def _make_frontmatter_dict(title, theme):
         
     return frontmatter
 
-def get_mermaid_diagram(format0, title, diagram_text, theme="forest",options={}):
+def xget_mermaid_diagram(format0, title, diagram_text, theme="forest",options={}):
     '''
     Sends a 'get' request to "https://mermaid.ink/" to get a diagram.
     The request includes a string of frontmatter, diagram-string, and options 

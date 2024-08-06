@@ -26,7 +26,7 @@ A sample Mermaid.js diagram generated using mermaidian is given below:
 
 ## Introduction
 
-Mermaid.js is a Javascript based package for creating many types of diagrams and charts from a set of declarative text-lines.
+variosMermaid.js is a Javascript based package for creating various types of diagrams and charts from a set of declarative text-lines.
 
 The **Mermaidian** package enables you to use Mermaid.js from Python. It utilizes the mermaid.ink service for getting diagrams in response to http requests in a prescribed format. mermaidian provides a set of Python functions for sending requests with diagram data to mermaid.ink and for getting, showing and saving the returned diagrams.
 
@@ -64,7 +64,7 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 
 The Mermaidian package has following six functions for getting, showing and saving Mermaid.js diagrams. 
 
-### `get_mermaid_diagram(format, title, diagram_text, theme, options)`
+### `get_mermaid_diagram(format, title, diagram_text, theme, config, options)`
 
 Sends a 'get' request to "https://mermaid.ink/" to get a diagram. The request includes a string of frontmatter, diagram-string, and options.
     
@@ -73,6 +73,7 @@ Parameters:
 - title (str): Title of the diagram. Empty string for no title.
 - diagram_text: The actual Mermaid code for the diagram as per Mermaid.js documentation
 - theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict. If string, then it can take one of 'forest', 'dark', 'neutral', 'default' or 'base' values. If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
+- config (dict): A dictionary for all Mermaid.js configuration options except 'theme' and 'theme_variables'. See https://mermaid.js.org/config/schema-docs/config.html
 - options (dict): a dict of option-value pairs. Some valid options include "bgColor", "width", "scale" etc.
 
 Returns: The diagram content in the requested form 
