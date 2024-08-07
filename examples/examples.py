@@ -82,6 +82,28 @@ org_chart_text_plus_styles_LR = org_chart_text_plus_styles.replace('flowchart TB
 get_show_and_save_diagram('org-chart-styled-LR', 'jpeg', 'Organization Structure', org_chart_text_plus_styles_LR)
 
 
+# Flowchart showing Client-Server interaction
+client_server_text = '''
+flowchart LR
+    subgraph AWS
+        s[Server]
+        db[(Database)]
+    end
+    subgraph Vercel
+        c[Client]
+    end
+
+    c -- HTTP GET --> s
+    s -. JSON .-> c    
+    db -. Result Set .-> s
+    s -- SQL Query --> db
+'''    
+theme = {'primaryColor':'#0369a1', 'primaryTextColor': '#fff', 'secondaryColor':'#312e81', 'tertiaryColor':'#4a044e', 'tertiaryTextColor': '#fff','lineColor': '#aaaaaa', 'fontSize':'10px', 'primaryBorderColor': '#ffffff', 'tertiaryBorderColor': '#ffffff'}
+config = {"flowchart": {"diagramPadding": 50,"padding": 30, 'curve':'basis', "subGraphTitleMargin": {"top":10}}}
+options = {'bgColor':'000000','width':'800'}
+
+get_show_and_save_diagram('client-sever-interaction', 'jpeg', 'Client-Server Interaction', client_server_text, theme, config, options)
+
 diagram2_text = '''
     gitGraph LR:
        commit
