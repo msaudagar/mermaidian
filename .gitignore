@@ -3,3 +3,4 @@ venv1/
 build/
 dist/
 mermaidian.egg-info/
+mermaidian/__pycache__/
