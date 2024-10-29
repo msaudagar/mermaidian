@@ -186,31 +186,40 @@ A number of working examples are given in the "examples" directory of this repos
 ### A flowchart with custom theme:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
-</p>
-
-### A flowchart with custom theme:
-
-<p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
-</p>
-
-### A flowchart with custom theme:
-
-<p align="center" width="100%">
     <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/org-chart-custom-theme.png">
 </p>
 
+
+
 ### A flowchart with custom theme:
 
+
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/client-server architecture.png">
 </p>
 
+
+
 ### A flowchart with custom theme:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/a-simple-git-diagram.png">
+</p>
+
+
+
+### A flowchart with custom theme:
+
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/customer-cashier-interaction.png">
+</p>
+
+
+
+### A flowchart with custom theme:
+
+<p align="center" width="100%">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/entity relationship diagram.png">
 </p>
 
 

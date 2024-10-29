@@ -500,8 +500,8 @@ def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_d
     # Draw a border rectangle if border_thicness>=1
     if border_thickness>=1:            
         # Calculate the top_left and bottom_right vertices for the border
-        top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2+1))
-        # top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2))
+        # top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2+1))
+        top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2))
         bottom_right = (widthp-math.ceil(border_thickness/2)-1, heightp-math.ceil(border_thickness/2)-1)
         cv2.rectangle(padded_img, top_left, bottom_right, border_color_bgra[:channels], border_thickness)
         
