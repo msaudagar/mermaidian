@@ -29,9 +29,9 @@ Functions:
     _dict_to_yaml(dict) -> YAML
     _make_frontmatter_dict(title, theme) -> dict
     _make_image_options_string(options) -> dict
-    get_mermaid_diagram(format, title, diagram_text, theme, config, options) -> bytes/svg_str
+    get_mermaid_diagram(format0, diagram_text, theme="forest",config={},options={}, title='') -> bytes/svg_str
     add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_data={}) -> bytes
-    add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data={}) -> svg_str
+    add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data_svg={}) -> svg_str
     save_diagram_as_image(path, diagram) -> None
     save_diagram_as_svg(path, diagram) -> None
     show_image_ipython(image) -> None
@@ -51,6 +51,24 @@ Main variables:
                          If a dict, it represents theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
     config (dict): a dictionary for all Mermaid.js configuration options except 'theme' and 'theme_variables'. See https://mermaid.js.org/config/schema-docs/config.html
     options (dict): Options that are applied to the requested image (see https://mermaid.ink/ ).
+
+    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}   
+    where, pad_x is for left and right paddings and pad_y is for top and bottom paddings.
+    
+    title_data (dict): A dict with required title properties
+    The following describes the items in the title_data with default values.
+    title_data_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}   
+    'position' is the title's position and can be any one of the following seven positions:
+    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+    'font_name' can be any cv2 font name including: 'simplex', 'plain', 'duplex', 'complex', 'triplex', 'complex_small', 'script_simplex', and 'script_complex'
+    'font_scale' is a decimal vaue corresponding to font size and 'font_thickness' is an interger (usually 1 or 2) for font weight.
+
+    title_data_svg_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'Arial, sans-serif', 'font_size':16, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
+    'position' is the title's position and can be any one of the following seven positions:
+    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+    'font_name' is any of usual system's font names (e.g. 'Arial, sans-serif' ) 
+    'font_size' is a usual font size (e.g. 16, 20, 32 etc.) and 'font_weight' is usual font weight (e.g. 'normal', 'bold' etc.)
+     
  '''
 
 __author__ = "Munawar Saudagar"
@@ -134,6 +152,31 @@ def show_image_ipython(image):
     display(Image(image))
 
 # ---------------------------------------------------------------------------------
+def show_image_ipython_centered(image_bytes, margin_top = '40px', margin_bottom = '0px'):
+    # Create an image from bytes
+    image = PImage.open(BytesIO(image_bytes))
+    
+    # Save image temporarily in memory
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    buffer.seek(0)
+    
+    # Encode the image to base64 for embedding in HTML
+#     import base64
+    encoded_image = base64.b64encode(buffer.getvalue()).decode()
+
+    # Create HTML to display image centered
+    html_code = f'''
+    <div style="display: flex; justify-content: center; align-items: center; margin-top:{margin_top}; margin-bottom:{margin_bottom};">
+        <img src="data:image/png;base64,{encoded_image}" />
+    </div>
+    '''
+
+    # Display the image using IPython's display and HTML
+    display(HTML(html_code)) 
+
+# ---------------------------------------------------------------------------------
+
 def show_image_pyplot(image):
     '''
     Displays the image-content as an image using matplotlib's pyplot
@@ -168,7 +211,8 @@ def show_image_pyplot(image):
 def show_image_cv2(image):
     '''
     Displays the image-content as an image using cv2.imshow()
-    Works only with non-IPython. Does not work in some Jupyter notebook  
+    Works only with non-IPython. Does not work in some Jupyter notebook 
+    To fix this in Colab use 'from google.colab.patches import cv2_imshow' and use 'cv2_imshow' in place of cv2.imshow
     uses numpy 'frombuffer' and cv2 'imdecode' and 'cvtColor' methods
     uses 'imshow()' function of cv2
 
@@ -202,7 +246,22 @@ def show_svg_ipython(svg):
     '''
     display(SVG(svg))
     
-# ---------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+def show_svg_ipython_centered(svg_string, margin_top = '40px', margin_bottom = '0px'):
+    # Encode SVG string to base64
+    svg_base64 = base64.b64encode(svg_string.encode('utf-8')).decode('utf-8')
+    
+    # Create HTML to display the SVG centered without scroll bars
+    html_code = f'''
+    <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-top:{margin_top}; margin-bottom:{margin_bottom} ">
+        <img src="data:image/svg+xml;base64,{svg_base64}" style="max-width: 100%; max-height: 100%;"/>
+    </div>
+    '''
+    
+    # Display the SVG using IPython's display and HTML
+    display(HTML(html_code))
+
+# --------------------------------------------------------------------------------
 def _make_image_options_string(options): 
     '''
     Converts the image options given in a dictionary to a query string.
@@ -305,24 +364,25 @@ def get_mermaid_diagram(format0, diagram_text, theme="forest",config={},options=
     diagram_content = diagram.text if format == "svg" else diagram.content
     return diagram_content
 
+
 # =================================================================================
-# Functions for adding paddings, border and title to images
+# Functions for adding paddings, border and title to images (png or jpg)
 # =================================================================================
 
 # ---------------------------------------------------------------------------------
 # A function to get x and y coordinate of title string
-def get_title_xy(image_width, image_height, title_width, title_height, position='tc', title_pad_y = 20, title_pad_x = 15):
+def get_title_xy(image_width, image_height, title_width, title_height, position='tc', title_margin_y = 20, title_margin_x = 15):
     if position == 'tl' or position == 'tc' or position == 'tr':
-        title_y = title_height + title_pad_y
+        title_y = title_height + title_margin_y
     else:
-        title_y = image_height-(title_height + title_pad_y)
+        title_y = image_height-(title_height + title_margin_y)
         
     if position == 'tl' or position == 'bl':
-        title_x = title_pad_x
+        title_x = title_margin_x
     elif position == 'tc' or position == 'bc':
         title_x = (image_width - title_width) // 2    
     elif position == 'tr' or position == 'br':
-        title_x = image_width - (title_width + title_pad_x)        
+        title_x = image_width - (title_width + title_margin_x)        
     return (title_x, title_y)  
 
 # ---------------------------------------------------------------------------------    
@@ -371,6 +431,26 @@ def get_image_format(image_bytes):
     
 # ---------------------------------------------------------------------------------    
 def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_data={}):
+    '''
+    Adds paddings, border and title to Mermaid.js 'png' or 'jpg' diagrams using cv2 methods
+
+            Parameters:
+                    image_bytes (bytes): the 'png' or 'jpg' diagram's binary data
+                    padding_data (dict): A dict with required padding and border properties
+                    The following describes the items in the padding_data with default values.
+                    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}   
+                    where, pad_x is for left and right paddings and pad_y is for top and bottom paddings.
+                    title_data (dict): A dict with required title properties
+                    The following describes the items in the title_data with default values.
+                    title_data_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}   
+                    'position' is the title's position and can be any one of the following seven positions:
+                    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+                    'font_name' can be any cv2 font name including: 'simplex', 'plain', 'duplex', 'complex', 'triplex', 'complex_small', 'script_simplex', and 'script_complex'
+                    'font_scale' is a decimal vaue corresponding to font size and 'font_thickness' is an interger (usually 1 or 2) for font weight.
+            Returns:
+                    The diagram with specified paddings, border and title (in binary data)  
+    ''' 
+    
     def destructure_dict(dict, *args):
         return [dict[arg] for arg in args]
     # OpenCV font types are cv2.FONT_HERSHEY_SIMPLEX, cv2.FONT_HERSHEY_DUPLEX etc. enumerations.
@@ -378,20 +458,21 @@ def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_d
     fonts = {'simplex':0, 'plain':1, 'duplex':2, 'complex':3, 'triplex':4, 'complex_small':5, 'script_simplex':6, 'script_complex':7}
     
     # defaults
-    padding_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}
-    title_defaults = {'title':'', 'position':'tc', 'title_pad_x':20, 'title_pad_y':20, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}
+    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}
+    title_data_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':30, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}
     
     # Overwrite defaults by actual props
-    pd = {**padding_defaults, **padding_data}
-    td = {**title_defaults, **title_data}
+    padding_data = {**padding_data_defaults, **padding_data}
+    title_data = {**title_data_defaults, **title_data}
     
     # Destructure into variables for easy coding
-    pad_x, pad_top, pad_bottom, pad_color, border_color, border_thickness = destructure_dict(pd, 'pad_x', 'pad_top', 'pad_bottom', 'pad_color', 'border_color', 'border_thickness') 
+    pad_x, pad_top, pad_bottom, pad_color, border_color, border_thickness = destructure_dict(padding_data, 'pad_x', 'pad_top', 'pad_bottom', 'pad_color', 'border_color', 'border_thickness') 
         
-    title, position, title_pad_x, title_pad_y, font_name, font_scale, font_color, font_bg_color, font_thickness = destructure_dict(td, 'title', 'position', 'title_pad_x', 'title_pad_y', 'font_name', 'font_scale', 'font_color', 'font_bg_color', 'font_thickness')
+    title, position, title_margin_x, title_margin_y, font_name, font_scale, font_color, font_bg_color, font_thickness = destructure_dict(title_data, 'title', 'position', 'title_margin_x', 'title_margin_y', 'font_name', 'font_scale', 'font_color', 'font_bg_color', 'font_thickness')
     
     # Convert all colors BGRA equivalents
-    pad_color_bgra = hex_to_bgra(pad_color)
+    if pad_color != "":
+        pad_color_bgra = hex_to_bgra(pad_color)
     border_color_bgra = hex_to_bgra(border_color)
     font_color_bgra = hex_to_bgra(font_color)
     if font_bg_color != "":
@@ -411,12 +492,16 @@ def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_d
     widthp = width + 2*pad_x
         
     # Create a numpy array for the padded image with same channels as in the input image
-    padded_img = np.full((heightp, widthp, channels), pad_color_bgra[:channels], dtype=np.uint8)
+    if pad_color != "":
+        padded_img = np.full((heightp, widthp, channels), pad_color_bgra[:channels], dtype=np.uint8)
+    else:
+        padded_img = np.zeros((heightp, widthp, channels),dtype=np.uint8)
     
     # Draw a border rectangle if border_thicness>=1
     if border_thickness>=1:            
         # Calculate the top_left and bottom_right vertices for the border
-        top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2))
+        top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2+1))
+        # top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2))
         bottom_right = (widthp-math.ceil(border_thickness/2)-1, heightp-math.ceil(border_thickness/2)-1)
         cv2.rectangle(padded_img, top_left, bottom_right, border_color_bgra[:channels], border_thickness)
         
@@ -425,7 +510,7 @@ def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_d
         text_size = cv2.getTextSize(title, fonts[font_name], font_scale, font_thickness)[0]
 
         # Calculate title x and y positions
-        text_x, text_y = get_title_xy(padded_img.shape[1], padded_img.shape[0], text_size[0], text_size[1], position, title_pad_y, title_pad_x)
+        text_x, text_y = get_title_xy(padded_img.shape[1], padded_img.shape[0], text_size[0], text_size[1], position, title_margin_y, title_margin_x)
 
         # Add a rectangle of bg_color behind the text for better visibility
         if font_bg_color != '':
@@ -455,7 +540,7 @@ def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_d
     # Convert to bytes
     padded_image_bytes = img_encoded.tobytes()
     
-    return padded_image_bytes 
+    return padded_image_bytes           
 
 # =================================================================================
 # Functions for adding paddings, border and title to SVGs
@@ -512,7 +597,27 @@ def get_mermaid_svg_width_and_height(svg):
     return svg_width_float, svg_height_float
 
 # ---------------------------------------------------------------------------------    
-def add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data={}):
+def add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data_svg={}):
+    '''
+    Adds paddings, border and title to Mermaid.js 'svg' diagrams using xml.etree.ElementTree (ET)
+
+            Parameters:
+                    svg_str (string): the 'svg' diagram's string
+                    padding_data (dict): A dict with required padding and border properties
+                    The following describes the items in the padding_data with default values.
+                    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}   
+                    where, pad_x is for left and right paddings and pad_y is for top and bottom paddings.
+                    title_data_svg (dict): A dict with required title properties.
+                    The following describes the items in the title_data_svg with default values.
+                    title_data_svg_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'Arial, sans-serif', 'font_size':16, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
+                    'position' is the title's position and can be any one of the following seven positions:
+                    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+                    'font_name' is any of usual system's font names (e.g. 'Arial, sans-serif' ) 
+                    'font_size' is a usual font size (e.g. 16, 20, 32 etc.) and 'font_weight' is usual font weight (e.g. 'normal', 'bold' etc.)
+            Returns:
+                    The diagram with specified paddings, border and title (in binary data)  
+    ''' 
+    
     set_width = get_svg_attribute_value(svg_str, 'width')
     if set_width == '100%':
         set_width = None        
@@ -525,18 +630,20 @@ def add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data={}
         return [dict[arg] for arg in args]
     
     # defaults
-    padding_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':1}
-    title_defaults = {'title':'', 'position':'tc', 'title_pad_x':20, 'title_pad_y':20, 'font_name':'Arial, sans-serif', 'font_size':16, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
+    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':1}
+    title_data_svg_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'Arial, sans-serif', 'font_size':16, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
     
     # Overwrite defaults by actual props
-    pd = {**padding_defaults, **padding_data}
-    td = {**title_defaults, **title_data}
+    padding_data = {**padding_data_defaults, **padding_data}
+    title_data_svg = {**title_data_svg_defaults, **title_data_svg}
     
     # Destructure into variables for easy coding
-    pad_x, pad_top, pad_bottom, pad_color, border_color, border_thickness = destructure_dict(pd, 'pad_x', 'pad_top', 'pad_bottom', 'pad_color', 'border_color', 'border_thickness') 
+    pad_x, pad_top, pad_bottom, pad_color, border_color, border_thickness = destructure_dict(padding_data, 'pad_x', 'pad_top', 'pad_bottom', 'pad_color', 'border_color', 'border_thickness') 
         
-    title, position, title_pad_x, title_pad_y, font_name, font_size, font_color, font_bg_color, font_weight = destructure_dict(td, 'title', 'position', 'title_pad_x', 'title_pad_y', 'font_name', 'font_size', 'font_color', 'font_bg_color', 'font_weight')
+    title, position, title_margin_x, title_margin_y, font_name, font_size, font_color, font_bg_color, font_weight = destructure_dict(title_data_svg, 'title', 'position', 'title_margin_x', 'title_margin_y', 'font_name', 'font_size', 'font_color', 'font_bg_color', 'font_weight')
    
+    if pad_color == '':
+        pad_color = 'transparent'
         # Parse the original SVG string
     svg_root = ET.fromstring(svg_str)
 
@@ -556,7 +663,8 @@ def add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data={}
     
     top_left = (math.ceil(border_thickness/2), math.ceil(border_thickness/2))
 #     bottom_right = (widthp-math.ceil(border_thickness/2)-1, heightp-math.ceil(border_thickness/2)-1)
-    bottom_right = (widthp-math.ceil(border_thickness/2)-1, heightp-math.ceil(border_thickness/2))
+    bottom_right = (widthp-math.ceil(border_thickness/2)-0, heightp-math.ceil(border_thickness/2))
+    # bottom_right = (widthp-math.ceil(border_thickness/2)-1, heightp-math.ceil(border_thickness/2))
 
     # Create a rect for 
     outer_rect_element = ET.Element('rect', {
@@ -606,7 +714,7 @@ def add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data={}
         title_height = font_size       
 
         # Calculate title x and y positions
-        text_x, text_y = get_title_xy(widthp, heightp, title_width, title_height, position, title_pad_y, title_pad_x)
+        text_x, text_y = get_title_xy(widthp, heightp, title_width, title_height, position, title_margin_y, title_margin_x)
     
         # Create the title text element
         title_element = ET.Element('text', {
@@ -651,48 +759,3 @@ def add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data={}
     return outer_svg_str    
 
 # ---------------------------------------------------------------------------------    
-
-# from PIL import Image as PImage
-# from io import BytesIO
-
-def show_image_ipython_centered(image_bytes, margin_top = '40px', margin_bottom = '0px'):
-    # Create an image from bytes
-    image = PImage.open(BytesIO(image_bytes))
-    
-    # Save image temporarily in memory
-    buffer = BytesIO()
-    image.save(buffer, format="PNG")
-    buffer.seek(0)
-    
-    # Encode the image to base64 for embedding in HTML
-#     import base64
-    encoded_image = base64.b64encode(buffer.getvalue()).decode()
-
-    # Create HTML to display image centered
-    html_code = f'''
-    <div style="display: flex; justify-content: center; align-items: center; margin-top:{margin_top}; margin-bottom:{margin_bottom};">
-        <img src="data:image/png;base64,{encoded_image}" />
-    </div>
-    '''
-
-    # Display the image using IPython's display and HTML
-    display(HTML(html_code))
-
-# ---------------------------------------------------------------------------------    
-
-# from IPython.display import display, HTML
-# import base64
-
-def show_svg_ipython_centered(svg_string, margin_top = '40px', margin_bottom = '0px'):
-    # Encode SVG string to base64
-    svg_base64 = base64.b64encode(svg_string.encode('utf-8')).decode('utf-8')
-    
-    # Create HTML to display the SVG centered without scroll bars
-    html_code = f'''
-    <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-top:{margin_top}; margin-bottom:{margin_bottom} ">
-        <img src="data:image/svg+xml;base64,{svg_base64}" style="max-width: 100%; max-height: 100%;"/>
-    </div>
-    '''
-    
-    # Display the SVG using IPython's display and HTML
-    display(HTML(html_code))

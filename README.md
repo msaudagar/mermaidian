@@ -6,7 +6,7 @@
 [![Forks](https://img.shields.io/github/forks/msaudagar/mermaidian?color=orange&label=Forks)](https://github.com/msaudagar/mermaidian/forks)
 
 
-Mermaidian is a simple Python interface for using Mermaid.js diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
+**Mermaidian** is a simple Python interface for using **Mermaid.js** diagramming capabilities from Python. It can be used from stand-alone Python or also from IPython based (Jupyter) notebooks. The core Mermaid.js syntax for writing diagram code is preserved so that the user can always refer to Mermaid.js documentation. However, the creation of the frontmatter for configuration and custom theme is made easier by using a dict instead of YAML encoding. 
 
 A sample Mermaid.js diagram generated using mermaidian is given below: 
 
@@ -26,14 +26,23 @@ A sample Mermaid.js diagram generated using mermaidian is given below:
 
 ## Introduction
 
-variosMermaid.js is a Javascript based package for creating various types of diagrams and charts from a set of declarative text-lines.
+**Mermaid.js** is a Javascript based tool for creating diagrams and charts from a set of Markdown-like text-lines. Each type of diagram has specific syntax which is clearly document on Mermaid.js homepage.
 
-The **Mermaidian** package enables you to use Mermaid.js from Python. It utilizes the mermaid.ink service for getting diagrams in response to http requests in a prescribed format. mermaidian provides a set of Python functions for sending requests with diagram data to mermaid.ink and for getting, showing and saving the returned diagrams.
+The way to use Mermaid.js from Python is through the **mermaid.ink** service, which returns diagrams as response to http requests in prescribed formats (see https://mermaid.ink/ for details).
+
+**Mermaidian** is a Python package that uses mermaid.ink service to enable using Mermaid.js from Python environments. It provides a set of functions for getting, displaying and saving Mermaid.js diagrams.    
+
+Mermaid.js is a great package for creating various types of drawings and charts. However, it does not provide proper control for adding paddings, borders and titles. Mermaidian enhances these capabilities by providing simple functions to add custom paddings, border and title to the diagrams returned from mermaid.ink. For IPython users, it also provides functions for  centralizing displaying of the diagrams.
 
 The following functions are meant to be used from the calling program (other functions are internal):
 - get_mermaid_diagram(): The main function to get the desired diagram either as image binary (bytes) or SVG text
+- add_paddings_border_and_title_to_image(): To add paddings, border and title to the diagram in png or jpg format
+- add_paddings_border_and_title_to_svg(): To add paddings, border and title to the diagram in svg format
 - show_image_ipython(): For displaying diagram from an image object in IPython setting (e.g. Jupyter notebook)
+- show_svg_ipython_centered(): Show an svg diagram "centralized" only in IPython/Jupyter setting
+- show_image_ipython_centered(): Show an image diagram "centralized" only in IPython/Jupyter setting  
 - show_image_pyplot(): For displaying diagram from an image object with matplotlib's pyplot
+- show_image_cv2(): For displaying diagram from an image object using cv2.imshow().Doesn't work in some notebooks
 - show_svg_ipython(): For displaying diagram from a SVG object in IPython setting (e.g. Jupyter notebook)
 - save_diagram_as_image(): For saving the diagram as an image (png, jpeg etc.)
 - save_diagram_as_svg(): For saving the diagram as a SVG file 
@@ -62,7 +71,7 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 
 ## Mermaidian Main Functions
 
-The Mermaidian package has following six functions for getting, showing and saving Mermaid.js diagrams. 
+The Mermaidian package has following functions for getting, showing and saving Mermaid.js diagrams. 
 
 ### `get_mermaid_diagram(format, title, diagram_text, theme, config, options)`
 

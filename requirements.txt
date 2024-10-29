@@ -4,3 +4,4 @@ numpy
 opencv-python
 PyYAML
 requests
+pillow

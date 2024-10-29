@@ -7,25 +7,47 @@ import mermaidian as mm
 
 out_path = 'output'
 
-def get_and_show_diagram(format, title, diagram_text, theme='default', config={}, options={}):
-  diagram = mm.get_mermaid_diagram(format, title, diagram_text, theme, config, options)
-  mm.show_image_pyplot(diagram)
-  return diagram
+# Following are base values for config, options, pad_data, title_data and title_data_svg for the examples to follow
+bg_color = "#ffffff"
+config0 = {'fontSize':'24px'}
+options0 = {'bgColor': bg_color, 'width': '600'}  # the hex bgColor in option should be witout '#'
+pad_data0 = {'pad_top': 80, 'pad_bottom':30, 'border_thickness':8, 'border_color':"#aaaaaa", 'pad_color': bg_color}
+title_data0 = {'position':'tc','title':'','font_scale':0.9, 'font_thickness':1, 'font_name':'duplex', 'font_bg_color':'', 'font_color':"#000000"}
+title_data_svg0 = {'position':'tc','font_name':'Arial, sans-serif', 'font_size':24, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
 
-def get_show_and_save_diagram(name, format, title, diagram_text, theme='default', config={}, options={}):
-  diagram = mm.get_mermaid_diagram(format, title, diagram_text, theme, config, options)
-  mm.show_image_pyplot(diagram)
-  mm.save_diagram_as_image(f'{out_path}/{name}.{format}', diagram)
-  return diagram
 
-# help(mm)
+# A helper function to get, show and save Mermaid.js image (png/jpg) based diagrams  
+def get_show_and_save_image(diagram_code, format, file_name, title, theme='default', config={**config0}, options={**options0}, pad_data={**pad_data0}, title_data={**title_data0}):
+  options['bgColor'] = options['bgColor'].replace('#', '')
+  diagram = mm.get_mermaid_diagram(format, diagram_code, theme, config, options)
+  title_data = {**title_data, 'title':title}
+  diagramPBT = mm.add_paddings_border_and_title_to_image(diagram, pad_data, title_data)
+  mm.show_image_pyplot(diagramPBT)
+  if file_name!="":
+    mm.save_diagram_as_image(f'{out_path}/{file_name}.{format}', diagramPBT)
+    
+  return diagramPBT
 
-# A simple organization chart
+# A helper function to get, show and save Mermaid.js svg based diagrams   
+def get_show_and_save_svg(diagram_code, format, file_name, title, theme='default',  config={**config0}, options={**options0}, pad_data={**pad_data0}, title_data_svg={**title_data_svg0}):
+  options['bgColor'] = options['bgColor'].replace('#', '')
+  diagram = mm.get_mermaid_diagram(format, diagram_code, theme, config, options)
+  title_data_svg = {**title_data_svg, 'title':title}
+  diagramPBT = mm.add_paddings_border_and_title_to_svg(diagram, pad_data, title_data_svg)
+  mm.show_svg_ipython(diagramPBT)
+  if file_name!="":
+    mm.save_diagram_as_svg(f'{out_path}/{file_name}.{format}', diagramPBT)
+    
+  return diagramPBT
+# ===================================================================================================
+# A simple organization chart example
 
-# Define the diagram in Mermaid syntax.
-org_chart_text = """
+# Following defines the Mermaid.js code for a simple organization chart of company "XYZ" with 3 departments, 2 sections in department-2 and
+# 2 teams in section-1 of department-2
+
+org_chart_code = """
 flowchart TB
-%% Define nodes
+%% Nodes
     c[Company XYZ]
     d1[Department-1]
     d2[Department-2]
@@ -35,7 +57,7 @@ flowchart TB
     d2s1t1[Team-1]
     d2s1t2[Team-2]
 
-%% Define links
+%% Links
     c --- d1
     c --- d2
     c --- d3
@@ -45,19 +67,50 @@ flowchart TB
     d2s1 --- d2s1t2    
 """
 
-# Get, show and save the 'org_chart' as .jpeg with default theme, config and options
-get_show_and_save_diagram('org-chart_default_theme', 'jpeg', 'Organization Structure', org_chart_text)
+# Example-1 Forest theme .png format
+options = {**options0, 'bgColor': '#f7fee7'}
+pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color':"#65a30d"}
+get_show_and_save_image(org_chart_code, 'png', 'org-chart-forest-theme', "Org-Chart 'Forest' Theme", 'forest', options=options, pad_data=pad_data)
 
-# Change the theme to 'forest'
-get_show_and_save_diagram('org-chart_forest_theme', 'jpeg', 'Organization Structure', org_chart_text, 'forest')
+# Example-2 Forest theme .svg format
+options = {**options0, 'bgColor': '#f7fee7', 'width': '460'}
+pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color':"#65a30d"}
+title_data_svg = {**title_data_svg0, 'font_color':'#000000'}
+get_show_and_save_svg(org_chart_code, 'svg', 'org-chart-forest-theme', "Org-Chart 'Forest' Theme", 'forest', config=config0, options=options, pad_data=pad_data, title_data_svg=title_data_svg)
 
-# Change the theme to 'dark' 
-get_show_and_save_diagram('org-chart_dark_theme', 'jpeg', 'Organization Structure', org_chart_text, 'dark')
+# Example-3 Custom theme .png format
+# Using custom theme. The background color is also changed using 'bgColor' in 'options'
+config = {**config0, "flowchart": {"rankSpacing": 80}}
+# "linkStyle default" is to set style for all Mermaid.js connector lines (strokes)  
+link_style_string = '''linkStyle default stroke:#ffffff,stroke-width:3px;'''
+org_chart_code1 = org_chart_code + link_style_string
 
-# Define styles: linkStyle and classes, and assign classes to org_chart's nodes as 'styles' string
+theme = {'primaryColor':'#075985',
+         'primaryTextColor': '#ffffff',
+         'lineColor': '#ffffff',
+         'fontSize':'24px',
+         'primaryBorderColor': '#ffffff'
+        }
+options = {**options0, 'bgColor':'#262626'}
+title_data = {**title_data0, 'font_color':'#ffffff', 'title_margin_y':40}
+pad_data = {**pad_data0, 'border_color': '#0ea5e9', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
+# The 'png' version of "Org-Chart 'Custom' Theme"
+get_show_and_save_image(org_chart_code1, 'png', 'org-chart-custom-theme', "Org-Chart 'Custom' Theme", theme, options=options, config=config, title_data=title_data, pad_data=pad_data)
+
+# Example-4 Custom theme .svg format
+# The svg version of "Org-Chart 'Custom' Theme"
+title_data_svg = {**title_data_svg0, 'font_color':'#ffffff', 'title_margin_y':40}
+pad_data = {**pad_data0, 'border_color': '#0ea5e9', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
+theme = {**theme, 'fontSize':'24px'}
+options = {**options0, 'bgColor':'#262626', 'width': '440'}
+get_show_and_save_svg(org_chart_code1, 'svg', 'org-chart-custom-theme', "Org-Chart 'Custom' Theme", theme, config=config, title_data_svg=title_data_svg, options=options, pad_data=pad_data)
+
+# Example-5 Using 'styles' (via 'classes') in the mermaid-code (.png format)
+
+# Define and assign classes. Note lines starting with %% are comment lines
 styles = """    
 %% Define links style (default means apply to all links) 
-    linkStyle default stroke:#aaaaaa,stroke-width:2px;
+    linkStyle default stroke:#555555,stroke-width:3px;
     
 %% define classes
     classDef comp fill:#93c5fd;
@@ -71,40 +124,28 @@ styles = """
     class d2s1,d2s2 sec;
     class d2s1t1,d2s1t2 team;  
 """
-# Concatenate org_chart_text and styles strings
-org_chart_text_plus_styles = org_chart_text + styles
+# Append style to org_chart_code
 
-# Get, display and save the styled org_chart
-get_show_and_save_diagram('org-chart-styled', 'jpeg', 'Organization Structure', org_chart_text_plus_styles)
+org_chart_code_with_styles  = org_chart_code + styles
 
-# Change org_chart direction by replacing 'TB' in org_chart_text_plus_styles to 'LR'
-org_chart_text_plus_styles_LR = org_chart_text_plus_styles.replace('flowchart TB', 'flowchart LR', 1)
-get_show_and_save_diagram('org-chart-styled-LR', 'jpeg', 'Organization Structure', org_chart_text_plus_styles_LR)
+theme = {'lineColor': '#555555'}
 
+# The image ('png') version of "Org-Chart With Styles"
+options = {**options0, 'bgColor':'#262626', 'width': '600'}
+options = {**options0, 'bgColor':'#dddddd', 'width': '600'}
+pad_data = {**pad_data0, 'border_color': '#555555', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
+title_data = {**title_data0, 'font_color':'#222222', 'title_margin_y':40}
+get_show_and_save_image(org_chart_code_with_styles, 'png', 'org-chart-with-styles', "Org-Chart With Styles", theme, config = config0, options=options, title_data=title_data, pad_data=pad_data)
 
-# Flowchart showing Client-Server interaction
-client_server_text = '''
-flowchart LR
-    subgraph AWS
-        s[Server]
-        db[(Database)]
-    end
-    subgraph Vercel
-        c[Client]
-    end
+# Example-6 Using 'styles' (via 'classes') in the mermaid-code (.svg format)
+options = {**options0, 'bgColor':'#dddddd', 'width': '440'}
+pad_data = {**pad_data0, 'border_color': '#555555', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
+title_data_svg = {**title_data_svg0, 'font_color':'#444444', 'title_margin_y':40}
+get_show_and_save_svg(org_chart_code_with_styles, 'svg', 'org-chart-with-styles', "Org-Chart With Styles", theme, config = config0, options=options, title_data_svg=title_data_svg, pad_data=pad_data)
 
-    c -- HTTP GET --> s
-    s -. JSON .-> c    
-    db -. Result Set .-> s
-    s -- SQL Query --> db
-'''    
-theme = {'primaryColor':'#0369a1', 'primaryTextColor': '#fff', 'secondaryColor':'#312e81', 'tertiaryColor':'#4a044e', 'tertiaryTextColor': '#fff','lineColor': '#aaaaaa', 'fontSize':'10px', 'primaryBorderColor': '#ffffff', 'tertiaryBorderColor': '#ffffff'}
-config = {"flowchart": {"diagramPadding": 50,"padding": 30, 'curve':'basis', "subGraphTitleMargin": {"top":10}}}
-options = {'bgColor':'000000','width':'800'}
+# Example-7 A Simple Git Diagram (.png format)
 
-get_show_and_save_diagram('client-sever-interaction', 'jpeg', 'Client-Server Interaction', client_server_text, theme, config, options)
-
-diagram2_text = '''
+git_diagram_code = '''
     gitGraph LR:
        commit
        commit
@@ -119,45 +160,60 @@ diagram2_text = '''
        commit
        commit
 '''
-theme = 'default'
-config = {}
-options = {'bgColor': 'dbeafe','width':'600px','height':'300'}
-jpeg2 = mm.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, theme, config ,options)
-mm.save_diagram_as_image('output/jpeg2.jpeg', jpeg2)
-mm.show_image_pyplot(jpeg2)
 
-diagram3_text = '''
-flowchart LR
-    subgraph AWS
+theme = {'primaryColor':'#3b82f6',
+         'primaryTextColor': '#ffffff',
+         'secondaryColor':'#fbbf24',
+         'secondaryTextColor': '#000000',
+         'fontSize':'16px',
+        }
+
+options = {**options0, 'bgColor': '#e7e5e4','width':'800px'}
+title_data = {**title_data0, 'font_color':'#000000', 'title_margin_y':60, 'font_scale':1.2, 'font_name':'complex'}
+pad_data = {**pad_data0, 'border_thickness':8, 'border_color': '#1e3a8a', 'pad_x':60, 'pad_top': 150, 'pad_bottom': 80, 'pad_color': options['bgColor']}
+
+get_show_and_save_image(git_diagram_code, 'png', 'a-simple-git-diagram', "A Simple Git Diagram", theme, config = config0, options=options, title_data=title_data, pad_data=pad_data)
+
+# Example-8 Flowchart with Subgraphs to depict a typical client-server architecture (.png format)
+client_server_diagram_code = '''
+flowchart LR 
+    linkStyle default stroke-width:2px;
+    subgraph Vercel
+        c[Client]
+    end    subgraph AWS
         s[Server]
         db[(Database)]
     end
-    subgraph Vercel
-        c[Client]
-    end
+
 
     c -- HTTP GET --> s
     s -. JSON .-> c    
     db -. Result Set .-> s
     s -- SQL Query --> db
-'''    
+''' 
+theme = {'primaryColor':'#000000',
+         'secondaryColor':'#555555',        
+         'tertiaryColor':'#777777',        
+         'primaryTextColor': '#ffffff',
+         'secondaryTextColor': '#ffffff',
+         'tertiaryTextColor': '#ffffff',
+         'primaryBorderColor': '#ffffff',
+         'lineColor': "#312e81"
+     }
 
-theme = 'default'
-config = {}
-options = {'bgColor': 'cccccc','width':'600px','height':'300'}
-jpeg3 = mm.get_mermaid_diagram('jpeg','Client on Vercel, Server & Database on AWS', diagram3_text, theme, config ,options)
-mm.save_diagram_as_image('output/jpeg3.jpeg', jpeg3)
-mm.show_image_pyplot(jpeg3)
+options = {**options0, 'bgColor': '#e7e5e4', 'width': '800'}
+pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color': "#1e3a8a", 'pad_x':60, 'pad_top': 150, 'pad_bottom': 80}
+title_data = {**title_data0, 'font_color':'#000000', 'title_margin_y':60, 'font_scale':1.2, 'font_name':'complex'}
+get_show_and_save_image(client_server_diagram_code, 'png', 'client-server architecture', "A Client-Server Architecture", theme, config = config0, options=options, title_data=title_data, pad_data=pad_data)
 
-
-diagram4_text = '''
+# Example-9  A customer-cashier interaction "Sequence Diagram" (.png format)
+interaction_diagram_code = '''
 sequenceDiagram
   participant C as Customer
   participant CH as Cashier
   participant E as Email System
 
-  rect rgb(236, 244, 203)
-  C->>CH:  Put items on counter
+  C->>CH:  Puts items on counter
   CH->>CH: Cashier Scans products
   CH-->>C: Gives total cost
   CH->>C: Asks for email address
@@ -166,16 +222,19 @@ sequenceDiagram
   CH->>E: Sends receipt to email 
   E-->>C: Emails receipt
   CH->>C: Gives 10% off coupon
-  end
 '''
-theme = {'primaryColor':'#fcd34d'}
-config = {}
-options = {'bgColor':'fef3c7', 'height':'500'}
-jpeg4 = mm.get_mermaid_diagram('jpeg','Customer-Cashier Interaction', diagram4_text, theme, config, options)
-mm.save_diagram_as_image('output/jpeg4.jpeg', jpeg4)
-mm.show_image_pyplot(jpeg4)
+theme = {'primaryColor':'#fcd34d',
+         'tertiaryColor':'#fcd34d',        
+         'primaryTextColor': '#000000',
+        }
 
-diagram5_text = '''
+options = {**options0, 'bgColor': '#ffffff', 'width': '600'}
+pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color': "#44403c", 'pad_x':60, 'pad_top': 150, 'pad_bottom': 80}
+title_data = {**title_data0, 'font_color':'#000000', 'title_margin_y':60, 'font_scale':1.0, 'font_name':'triplex'}
+get_show_and_save_image(interaction_diagram_code, 'png', 'customer-cashier-interaction', "Customer-Cashier Interaction", theme, config = config0, options=options, title_data=title_data, pad_data=pad_data)
+
+# Example-10 A Simple Entity Relationship Diagram (ERD) 
+erd_code = '''
     erDiagram
     CAR ||--o{ NAMED-DRIVER : allows
     CAR {
@@ -202,39 +261,9 @@ diagram5_text = '''
         string manufacturerName 
         string(99) manufacturerAddress
     }  
-'''   
-theme = 'forest'
-config = {}
-options = {'bgColor': 'e5e7eb', 'width': '400'}
-jpeg5 = mm.get_mermaid_diagram('jpeg', 'Entity Relationship Diagram', diagram5_text, theme, config, options)
-mm.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
-mm.show_image_pyplot(jpeg5)
+''' 
 
-diagram6_text = '''
-%%{
-  init: {
-    "gantt": {
-      'barHeight' :100,
-      'fontSize' :32,
-      'barGap' :10,
-      'sectionFontSize': 32
-    }
-  }
-}%%
-gantt
-    dateFormat MM
-    axisFormat %B
-    section Task 1
-        Design the GUI :task1, 01, 91d
-    section Task 2
-        Write code for the GUI :task2, 02, 60d
-    section Task 3
-        Test the GUI :task3, 05, 30d
-'''   
-
-theme = 'forest'
-config = {}
-options = {'bgColor':'e0f2fe', 'height':'300'}
-jpeg6 = mm.get_mermaid_diagram('jpeg', ' ', diagram6_text, theme, config, options)
-mm.save_diagram_as_image('output/jpeg6.jpeg', jpeg6)
-mm.show_image_pyplot(jpeg6)
+options = {**options0, 'bgColor': '#eeeeee', 'width': '600'}
+pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color': "#cde498", 'pad_x':60, 'pad_top': 150, 'pad_bottom': 40}
+title_data = {**title_data0, 'font_color':'#444444', 'title_margin_y':60, 'font_scale':1.1, 'font_name':'complex'}
+get_show_and_save_image(erd_code, 'png', 'entity relationship diagram', "Entity Relationship Diagram", 'forest', config = config0, options=options, title_data=title_data, pad_data=pad_data)
