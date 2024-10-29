@@ -10,7 +10,7 @@ out_path = 'output'
 # Following are base values for config, options, pad_data, title_data and title_data_svg for the examples to follow
 bg_color = "#ffffff"
 config0 = {'fontSize':'24px'}
-options0 = {'bgColor': bg_color, 'width': '600'}  # the hex bgColor in option should be witout '#'
+options0 = {'bgColor': bg_color, 'width': '500'}  # the hex bgColor in option should be witout '#'
 pad_data0 = {'pad_top': 80, 'pad_bottom':30, 'border_thickness':8, 'border_color':"#aaaaaa", 'pad_color': bg_color}
 title_data0 = {'position':'tc','title':'','font_scale':0.9, 'font_thickness':1, 'font_name':'duplex', 'font_bg_color':'', 'font_color':"#000000"}
 title_data_svg0 = {'position':'tc','font_name':'Arial, sans-serif', 'font_size':24, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
@@ -73,7 +73,7 @@ pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color':"#65a30
 get_show_and_save_image(org_chart_code, 'png', 'org-chart-forest-theme', "Org-Chart 'Forest' Theme", 'forest', options=options, pad_data=pad_data)
 
 # Example-2 Forest theme .svg format
-options = {**options0, 'bgColor': '#f7fee7', 'width': '460'}
+options = {**options0, 'bgColor': '#f7fee7'}
 pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color':"#65a30d"}
 title_data_svg = {**title_data_svg0, 'font_color':'#000000'}
 get_show_and_save_svg(org_chart_code, 'svg', 'org-chart-forest-theme', "Org-Chart 'Forest' Theme", 'forest', config=config0, options=options, pad_data=pad_data, title_data_svg=title_data_svg)
@@ -102,7 +102,7 @@ get_show_and_save_image(org_chart_code1, 'png', 'org-chart-custom-theme', "Org-C
 title_data_svg = {**title_data_svg0, 'font_color':'#ffffff', 'title_margin_y':40}
 pad_data = {**pad_data0, 'border_color': '#0ea5e9', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
 theme = {**theme, 'fontSize':'24px'}
-options = {**options0, 'bgColor':'#262626', 'width': '440'}
+options = {**options0, 'bgColor':'#262626'}
 get_show_and_save_svg(org_chart_code1, 'svg', 'org-chart-custom-theme', "Org-Chart 'Custom' Theme", theme, config=config, title_data_svg=title_data_svg, options=options, pad_data=pad_data)
 
 # Example-5 Using 'styles' (via 'classes') in the mermaid-code (.png format)
@@ -131,14 +131,13 @@ org_chart_code_with_styles  = org_chart_code + styles
 theme = {'lineColor': '#555555'}
 
 # The image ('png') version of "Org-Chart With Styles"
-options = {**options0, 'bgColor':'#262626', 'width': '600'}
-options = {**options0, 'bgColor':'#dddddd', 'width': '600'}
+options = {**options0, 'bgColor':'#dddddd'}
 pad_data = {**pad_data0, 'border_color': '#555555', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
 title_data = {**title_data0, 'font_color':'#222222', 'title_margin_y':40}
 get_show_and_save_image(org_chart_code_with_styles, 'png', 'org-chart-with-styles', "Org-Chart With Styles", theme, config = config0, options=options, title_data=title_data, pad_data=pad_data)
 
 # Example-6 Using 'styles' (via 'classes') in the mermaid-code (.svg format)
-options = {**options0, 'bgColor':'#dddddd', 'width': '440'}
+options = {**options0, 'bgColor':'#dddddd'}
 pad_data = {**pad_data0, 'border_color': '#555555', 'pad_x':60, 'pad_top': 100, 'pad_bottom': 40, 'pad_color': options['bgColor']}
 title_data_svg = {**title_data_svg0, 'font_color':'#444444', 'title_margin_y':40}
 get_show_and_save_svg(org_chart_code_with_styles, 'svg', 'org-chart-with-styles', "Org-Chart With Styles", theme, config = config0, options=options, title_data_svg=title_data_svg, pad_data=pad_data)
@@ -228,7 +227,7 @@ theme = {'primaryColor':'#fcd34d',
          'primaryTextColor': '#000000',
         }
 
-options = {**options0, 'bgColor': '#ffffff', 'width': '600'}
+options = {**options0, 'bgColor': '#ffffff'}
 pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color': "#44403c", 'pad_x':60, 'pad_top': 150, 'pad_bottom': 80}
 title_data = {**title_data0, 'font_color':'#000000', 'title_margin_y':60, 'font_scale':1.0, 'font_name':'triplex'}
 get_show_and_save_image(interaction_diagram_code, 'png', 'customer-cashier-interaction', "Customer-Cashier Interaction", theme, config = config0, options=options, title_data=title_data, pad_data=pad_data)
@@ -263,7 +262,7 @@ erd_code = '''
     }  
 ''' 
 
-options = {**options0, 'bgColor': '#eeeeee', 'width': '600'}
+options = {**options0, 'bgColor': '#eeeeee'}
 pad_data = {**pad_data0, 'pad_color': options['bgColor'], 'border_color': "#cde498", 'pad_x':60, 'pad_top': 150, 'pad_bottom': 40}
 title_data = {**title_data0, 'font_color':'#444444', 'title_margin_y':60, 'font_scale':1.1, 'font_name':'complex'}
 get_show_and_save_image(erd_code, 'png', 'entity relationship diagram', "Entity Relationship Diagram", 'forest', config = config0, options=options, title_data=title_data, pad_data=pad_data)

@@ -428,9 +428,115 @@ def get_image_format(image_bytes):
         return '.webp'  # WEBP format
     else:
         return None     
-    
 # ---------------------------------------------------------------------------------    
 def add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_data={}):
+    '''
+    Adds paddings, border and title to Mermaid.js 'png' or 'jpg' diagrams using cv2 methods
+
+            Parameters:
+                    image_bytes (bytes): the 'png' or 'jpg' diagram's binary data
+                    padding_data (dict): A dict with required padding and border properties
+                    The following describes the items in the padding_data with default values.
+                    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}   
+                    where, pad_x is for left and right paddings and pad_y is for top and bottom paddings.
+                    title_data (dict): A dict with required title properties
+                    The following describes the items in the title_data with default values.
+                    title_data_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}   
+                    'position' is the title's position and can be any one of the following seven positions:
+                    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+                    'font_name' can be any cv2 font name including: 'simplex', 'plain', 'duplex', 'complex', 'triplex', 'complex_small', 'script_simplex', and 'script_complex'
+                    'font_scale' is a decimal vaue corresponding to font size and 'font_thickness' is an interger (usually 1 or 2) for font weight.
+            Returns:
+                    The diagram with specified paddings, border and title (in binary data)  
+    ''' 
+    
+    def destructure_dict(dict, *args):
+        return [dict[arg] for arg in args]
+    # OpenCV font types are cv2.FONT_HERSHEY_SIMPLEX, cv2.FONT_HERSHEY_DUPLEX etc. enumerations.
+    # For simplicity following dict is used to map the 
+    fonts = {'simplex':0, 'plain':1, 'duplex':2, 'complex':3, 'triplex':4, 'complex_small':5, 'script_simplex':6, 'script_complex':7}
+    
+    # defaults
+    padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}
+    title_data_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':30, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}
+    
+    # Overwrite defaults by actual props
+    padding_data = {**padding_data_defaults, **padding_data}
+    title_data = {**title_data_defaults, **title_data}
+    
+    # Destructure into variables for easy coding
+    pad_x, pad_top, pad_bottom, pad_color, border_color, border_thickness = destructure_dict(padding_data, 'pad_x', 'pad_top', 'pad_bottom', 'pad_color', 'border_color', 'border_thickness') 
+        
+    title, position, title_margin_x, title_margin_y, font_name, font_scale, font_color, font_bg_color, font_thickness = destructure_dict(title_data, 'title', 'position', 'title_margin_x', 'title_margin_y', 'font_name', 'font_scale', 'font_color', 'font_bg_color', 'font_thickness')
+    
+    # Convert all colors BGRA equivalents
+    if pad_color != "":
+        pad_color_bgra = hex_to_bgra(pad_color)
+    border_color_bgra = hex_to_bgra(border_color)
+    font_color_bgra = hex_to_bgra(font_color)
+    if font_bg_color != "":
+        font_bg_color_bgra = hex_to_bgra(font_bg_color)
+    
+    # Convert image bytes to a numpy array
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    
+    # Decode image bytes to OpenCV format, preserving alpha channel by using 'cv2.IMREAD_UNCHANGED' option
+    img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+    
+    # Get the height, width and channels of the original image
+    height, width, channels = img.shape
+    
+    # Calculate the height and width of the paded image
+    heightp = height + pad_top + pad_bottom
+    widthp = width + 2*pad_x
+    
+    if border_thickness == 0:
+        if pad_color != "":
+            padded_img = np.full((heightp, widthp, channels), pad_color_bgra[:channels], dtype=np.uint8)
+        else:
+            padded_img = np.zeros((heightp, widthp, channels),dtype=np.uint8)
+    else:
+        padded_img = np.full((heightp, widthp, channels),  border_color_bgra[:channels], dtype=np.uint8)
+        img1 = np.full((heightp-2*border_thickness, widthp-2*border_thickness, channels),  pad_color_bgra[:channels], dtype=np.uint8)
+        padded_img[border_thickness:heightp - border_thickness, border_thickness:widthp-border_thickness] = img1
+       
+        
+    if title !='':
+        # Determine text_size of the title      
+        text_size = cv2.getTextSize(title, fonts[font_name], font_scale, font_thickness)[0]
+
+        # Calculate title x and y positions
+        text_x, text_y = get_title_xy(padded_img.shape[1], padded_img.shape[0], text_size[0], text_size[1], position, title_margin_y, title_margin_x)
+
+        # Add a rectangle of bg_color behind the text for better visibility
+        if font_bg_color != '':
+            top_left_corner = (text_x - 10, text_y - text_size[1] - 10)
+            bottom_right_corner = (text_x + text_size[0] + 10, text_y + 10)
+            cv2.rectangle(padded_img, top_left_corner, bottom_right_corner, font_bg_color_bgra[:channels], -1)
+
+        # Add text (title) on the image
+        cv2.putText(padded_img, title, (text_x, text_y), fonts[font_name], font_scale, font_color_bgra[:channels], font_thickness, cv2.LINE_AA)
+      
+    # Place the original image on empty padded image.
+    padded_img[pad_top:pad_top + height, pad_x:pad_x + width] = img   
+        
+    # Detect image format
+    image_format = get_image_format(image_bytes)
+    if image_format is None:
+        image_format = 'png'  # Fallback to PNG if format detection fails 
+        
+    # Encode the padded image back to the original format   
+    _, img_encoded = cv2.imencode(f'.{image_format}', padded_img)
+    
+    # Convert to bytes
+    padded_image_bytes = img_encoded.tobytes()
+    
+    return padded_image_bytes           
+
+# ---------------------------------------------------------------------------------    
+    
+# ---------------------------------------------------------------------------------    
+def xadd_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_data={}):
     '''
     Adds paddings, border and title to Mermaid.js 'png' or 'jpg' diagrams using cv2 methods
 
