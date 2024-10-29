@@ -73,23 +73,69 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 
 The Mermaidian package has following functions for getting, showing and saving Mermaid.js diagrams. 
 
-### `get_mermaid_diagram(format, title, diagram_text, theme, config, options)`
+### `get_mermaid_diagram(format, diagram_code, theme="forest",config={},options={}, title='')`
 
 Sends a 'get' request to "https://mermaid.ink/" to get a diagram. The request includes a string of frontmatter, diagram-string, and options.
     
 Parameters:  
 - format (str): The format of the requested diagram. One of 'svg', 'pdf', 'png','jpeg' or 'webp'.
 - title (str): Title of the diagram. Empty string for no title.
-- diagram_text: The actual Mermaid code for the diagram as per Mermaid.js documentation
+- diagram_code: The actual Mermaid code for the diagram as per Mermaid.js documentation
 - theme (str/dict): The theme of the Mermaid diagram. Can be a string or a dict. If string, then it can take one of 'forest', 'dark', 'neutral', 'default' or 'base' values. If dict, then it can have option-value pairs for theme_variables (see https://mermaid.js.org/config/schema-docs/config.html)
 - config (dict): A dictionary for all Mermaid.js configuration options except 'theme' and 'theme_variables'. See https://mermaid.js.org/config/schema-docs/config.html
 - options (dict): a dict of option-value pairs. Some valid options include "bgColor", "width", "scale" etc.
 
-Returns: The diagram content in the requested form 
+Returns: The diagram content in the requested form
+
+### `add_paddings_border_and_title_to_image(image_bytes, padding_data={}, title_data={})`
+
+Adds paddings, border and title to the diagram in png or jpg format
+
+Parameters:
+- padding_data (dict): A dict with required padding and border properties
+
+    - padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}   
+    where, pad_x is for left and right paddings and pad_top and pad_bottom are for top and bottom paddings respectively.
+    
+- title_data (dict): A dict with required title properties
+    The following describes the items in the title_data with default values.
+    - title_data_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'simplex', 'font_scale':0.6, 'font_color':'#000000', 'font_bg_color':'', 'font_thickness':1}
+
+    'position' is the title's position and can be any one of the following seven positions:
+    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+
+    'font_name' can be any cv2 font name including: 'simplex', 'plain', 'duplex', 'complex', 'triplex', 'complex_small', 'script_simplex', and 'script_complex'
+
+    'font_scale' is a decimal vaue corresponding to font size and 'font_thickness' is an interger (usually 1 or 2) for font weight.
+
+### `add_paddings_border_and_title_to_svg(svg_str, padding_data={}, title_data_svg={})`
+
+Adds paddings, border and title to the diagram in png or jpg format
+
+Parameters:
+- padding_data (dict): A dict with required padding and border properties
+
+    - padding_data_defaults = {'pad_x':40, 'pad_top':40, 'pad_bottom':40, 'pad_color':'#aaaaaa', 'border_color':'#000000', 'border_thickness':2}   
+    where, pad_x is for left and right paddings and pad_top and pad_bottom are for top and bottom paddings respectively.
+    
+- title_data_svg_defaults = {'title':'', 'position':'tc', 'title_margin_x':20, 'title_margin_y':20, 'font_name':'Arial, sans-serif', 'font_size':16, 'font_color':'#000000', 'font_bg_color':'', 'font_weight':'normal'}
+
+    'position' is the title's position and can be any one of the following seven positions:
+    'tl' (top-left), 'tc' (top-center), 'tr' (top-right), 'mc' (middle-center), 'bl' (bottom-left), 'bc' (bottom-center), and 'br' (bottom-right)
+
+    'font_name' is any of usual system's font names (e.g. 'Arial, sans-serif' )
+
+    'font_size' is a usual font size (e.g. 16, 20, 32 etc.) and 'font_weight' is usual font weight (e.g. 'normal', 'bold' etc.)
 
 ### `show_image_pyplot(image)`
 
 Displays the image-content as an image using matplotlib's pyplot. Works across both IPython and non-IPython.   
+Parameter: image (bytes): The diagram image to be displayed    
+Returns: None
+
+### `show_image_cv2(image)`
+
+Displays diagram from an image object using cv2.imshow(). Doesn't work in some notebooks.  
 Parameter: image (bytes): The diagram image to be displayed    
 Returns: None
 
@@ -99,11 +145,20 @@ Displays the image-content as an image in IPython systems (e.g. Jupyter notebook
 Parameter: image (bytes): The diagram image to be displayed    
 Returns: None
 
+### `show_image_ipython_centered(image_bytes, margin_top, margin_bottom)`
+
+Show an image diagram "centralized" (only in IPython/Jupyter setting )  
+
 ### `show_svg_ipython(svg)`
 
 Displays the SVG-text as an SVG in IPython systems (e.g. Jupyter notebooks). Does not work in non-IPython cases.
 Parameter: image (text): The svg text to be displayed  
 Returns: None
+
+### `show_svg_ipython_centered(image_bytes, margin_top, margin_bottom)`
+
+Show an svg diagram "centralized" (only in IPython/Jupyter setting )  
+
 
 ### `save_diagram_as_image(path, diagram)`
 
@@ -125,221 +180,39 @@ Returns: None
 
 ## Examples
 
-The following examples demonstrate the use of "mermaidian" functions for requesting, saving and displaying Mermaid.js diagrams. 
+A number of working examples are given in the "examples" directory of this repository. Following diagrams are outputs of some of these examples. 
 
-### Example 1 : A Simple Flowchart
 
-```python
-import mermaidian as mmp
-
-# define the diagram code/text as per Mermaid.js docs.
-
-diagram1_text = """
-flowchart TD
-%% Nodes
-    c[Company XYZ]
-    d1[Department-1]
-    d2[Department-2]
-    d3[Department-3]
-    d2s1[Section-1]
-    d2s2[Section-2]
-    d2s1t1[Team-1]
-    d2s1t2[Team-2]
-
-%% Links
-    c --- d1
-    c --- d2
-    c --- d3
-    d2 --- d2s1
-    d2 --- d2s2
-    d2s1 --- d2s1t1
-    d2s1 --- d2s1t2    
-"""
-# define styes string as per Mermaid.js docs.
-styles = """    
-%% Define links style (default means apply to all links) 
-    linkStyle default stroke:#aaaaaa,stroke-width:2px,color:red;
-    
-%% define classes
-    classDef comp fill:#93c5fd;
-    classDef dep fill:#FF9999;
-    classDef sec fill:#FFDEAD;
-    classDef team fill:#BDFFA4;
-
-%% Assign classes to nodes
-    class c comp;
-    class d1,d2,d3 dep;
-    class d2s1,d2s2 sec;
-    class d2s1t1,d2s1t2 team;  
-"""
-# concatenate styles with the diagram1_text  
-diagram1_text_plus_styles = diagram1_text + styles
-
-# Note that only following three function calls from mermaidian to get, save and display the diagram.
-# The names of the functions clearly describe their functionalities.
-
-jpeg1 = mmp.get_mermaid_diagram('jpeg','Organization Structure', diagram1_text_plus_styles)
-mmp.save_diagram_as_image('jpeg1.jpeg', jpeg1)
-mmp.show_image_pyplot(jpeg1)
-```
-
-The result of the above code is given below:
+### A flowchart with custom theme:
 
 <p align="center" width="100%">
     <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
 </p>
 
-### Example 2 : Git Commits Diagram
-
-```python
-import mermaidian as mmp
-
-# define the diagram code/text as per Mermaid.js docs.
-
-diagram2_text = '''
-    gitGraph LR:
-       commit
-       commit
-       branch develop
-       commit
-       commit
-       commit
-       checkout main
-       commit
-       commit
-       merge develop
-       commit
-       commit
-'''
-
-jpeg2 = mmp.get_mermaid_diagram('jpeg','Git Diagram', diagram2_text, 'default',{'bgColor': 'dbeafe','width':'600px','height':'300'})
-mmp.save_diagram_as_image('jpeg2.jpeg', jpeg2)
-mmp.show_image_pyplot(jpeg2)
-```
-
-The result of the above code is given below:
+### A flowchart with custom theme:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg2.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
 </p>
 
-### Example 3 : Client-Server Interaction
-
-```python
-import mermaidian as mmp
-
-# define the diagram code/text as per Mermaid.js docs.
-
-diagram3_text = '''
-flowchart LR
-    subgraph AWS
-        s[Server]
-        db[(Database)]
-    end
-    subgraph Vercel
-        c[Client]
-    end
-
-    c -- HTTP GET --> s
-    s -. JSON .-> c    
-    db -. Result Set .-> s
-    s -- SQL Query --> db
-'''    
-jpeg3 = mmp.get_mermaid_diagram('jpeg','Client on Vercel, Server & Database on AWS', diagram3_text, 'default',{'bgColor': 'cccccc','width':'600px','height':'300'})
-mmp.save_diagram_as_image('jpeg3.jpeg', jpeg3)
-mmp.show_image_pyplot(jpeg3)
-```
-
-The result of the above code is given below:
+### A flowchart with custom theme:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg3.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/org-chart-custom-theme.png">
 </p>
 
-### Example 4 : A Customer-Cashier Interaction Sequence Diagram
-
-```python
-import mermaidian as mmp
-
-# define the diagram code/text as per Mermaid.js docs.
-
-diagram4_text = '''
-sequenceDiagram
-  participant C as Customer
-  participant CH as Cashier
-  participant E as Email System
-
-  rect rgb(236, 244, 203)
-  C->>CH:  Put items on counter
-  CH->>CH: Cashier Scans products
-  CH-->>C: Gives total cost
-  CH->>C: Asks for email address
-  C->>CH: Provides email address
-  C->>CH: Pays with cash/card
-  CH->>E: Sends receipt to email 
-  E-->>C: Emails receipt
-  CH->>C: Gives 10% off coupon
-  end
-'''
-
-jpeg4 = mmp.get_mermaid_diagram('jpeg','Customer-Cashier Interaction', diagram4_text, {'primaryColor':'#fcd34d'},{'bgColor':'fef3c7', 'height':'500'})
-mmp.save_diagram_as_image('jpeg4.jpeg', jpeg4)
-mmp.show_image_pyplot(jpeg4)
-```
-
-
-The result of the above code is given below:
+### A flowchart with custom theme:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg4.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
 </p>
 
-### Example 5 : A Simple Entity Relationship Diagram (ERD)
-
-```python
-import mermaidian as mmp
-
-# define the diagram code/text as per Mermaid.js docs.
-
-diagram5_text = '''
-    erDiagram
-    CAR ||--o{ NAMED-DRIVER : allows
-    CAR {
-        string registrationNumber PK
-        string make
-        string model
-        string[] parts
-    }
-    PERSON ||--o{ NAMED-DRIVER : is
-    PERSON {
-        string driversLicense PK
-        string(99) firstName
-        string lastName
-        string phone UK
-        int age
-    }
-    NAMED-DRIVER {
-        string carRegistrationNumber PK, FK
-        string driverLicence PK, FK
-    }
-    MANUFACTURER ||--o{ CAR : makes
-    MANUFACTURER {
-        string manufacturerBrand PK
-        string manufacturerName 
-        string(99) manufacturerAddress
-    }  
-'''   
-
-jpeg5 = mmp.get_mermaid_diagram('jpeg', 'Entity Relationship Diagram', diagram5_text,'forest', {'bgColor': 'e5e7eb', 'width': '400'})
-mmp.save_diagram_as_image('output/jpeg5.jpeg', jpeg5)
-mmp.show_image_pyplot(jpeg5)
-```
-
-The result of the above code is given below:
+### A flowchart with custom theme:
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg5.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/jpeg1.jpeg">
 </p>
+
 
 ## Conclusions
 
