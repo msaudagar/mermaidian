@@ -11,7 +11,7 @@
 A sample Mermaid.js diagram generated using mermaidian is given below: 
 
 <p align="center" width="100%">
-    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/ml-bg-black2.jpeg">
+    <img src="https://raw.githubusercontent.com/msaudagar/mermaidian/main/assets/llm-products.png">
 </p>
 
 ## Table of Contents 📋
