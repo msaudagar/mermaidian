@@ -4,3 +4,8 @@ from .mermaidian import save_diagram_as_svg
 from .mermaidian import show_image_ipython
 from .mermaidian import show_image_pyplot
 from .mermaidian import show_svg_ipython
+from .mermaidian import add_paddings_border_and_title_to_image
+from .mermaidian import add_paddings_border_and_title_to_svg
+from .mermaidian import show_image_ipython_centered
+from .mermaidian import show_svg_ipython_centered
+from .mermaidian import show_image_cv2
