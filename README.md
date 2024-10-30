@@ -21,7 +21,7 @@ A sample Mermaid.js diagram generated using mermaidian is given below:
 - [Getting Started](#Getting-Started)
 - [Mermaidian Main Functions](#Mermaidian-Main-Functions)
 - [Examples](#Examples)
-- [Conclusions](#Conclusion)
+- [Conclusions](#Conclusions)
 - [License](#License)
 - [References](#References)
 
