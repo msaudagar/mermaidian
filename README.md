@@ -444,6 +444,8 @@ get_show_and_save_image(erd_code, 'png', 'entity relationship diagram', "Entity 
 
 - mermaidian is a set of Python functions that enable users to easily use Mermaid.js diagramming capabilities from Python. It provides a simple way to include custom theme variables in a dict form. Other image options can also be specified as key-value pairs in a dict.
 
+- Mermaidian enhances Mermaid.js by providing simple functions to add custom paddings, border and title to the diagrams returned from mermaid.ink. For IPython users, it also provides functions for  centralizing displaying of the diagrams.
+
 - The core Mermaid.js syntax is preserved, therefore most of the Mermaid.js documentation can be referred for syntax and configuration details. 
 
 ## License
