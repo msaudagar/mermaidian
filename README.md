@@ -49,7 +49,7 @@ The following functions are meant to be used from the calling program (other fun
 
 The mermaidian functions allow you to specify various options as key-value pairs. For the details of available mermaid.ink options, see https://mermaid.ink/ and for mermaid configuration options, see https://mermaid.js.org/config/schema-docs/config.html
 
-For a detailed help description on mermaidian, execute `help(mmp)` after importing it as mmp
+For a detailed help description on mermaidian, execute `help(mm)` after importing it as mm
 
 
 ## Technologies-Used
@@ -61,6 +61,7 @@ For a detailed help description on mermaidian, execute `help(mmp)` after importi
 - [![opencv-python](https://img.shields.io/badge/opencv_python-4.10.0.84-orange)](https://pypi.org/project/opencv-python/)
 - [![PyYAML](https://img.shields.io/badge/PyYAML-6.0.1-magenta)](https://pypi.org/project/PyYAML/)
 - [![requests](https://img.shields.io/badge/requests-2.32.3-cyan)](https://pypi.org/project/requests/)
+- [![Pillow](https://img.shields.io/badge/pillow-10.4.0-purple)](https://pypi.org/project/pillow/)
 
 ## Getting-Started
 
