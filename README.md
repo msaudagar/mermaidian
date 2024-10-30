@@ -19,8 +19,9 @@ A sample Mermaid.js diagram generated using mermaidian is given below:
 - [Introduction](#Introduction)
 - [Technologies Used](#Technologies-Used)
 - [Getting Started](#Getting-Started)
+- [Mermaidian Main Functions](#Mermaidian-Main-Functions)
 - [Examples](#Examples)
-- [Conclusion](#Conclusion)
+- [Conclusions](#Conclusion)
 - [License](#License)
 - [References](#References)
 
